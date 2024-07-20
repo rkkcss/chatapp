@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    font-family: "Ubuntu", sans-serif;
+}
+
+/* header span.ant-menu-title-content {
+    margin-inline-start: unset !important;
+} */

@@ -48,4 +48,5 @@ export { persistor };
 export default store;
 
 export type UserStore = ReturnType<typeof store.getState>;
+export type WebSocketStore = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

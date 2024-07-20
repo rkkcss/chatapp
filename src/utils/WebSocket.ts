@@ -1,8 +1,9 @@
 import SockJS from 'sockjs-client';
 import { over, Client, Message } from 'webstomp-client';
 import { User } from '../redux/userSlice';
-import { setUsers } from '../redux/webSocketSlice';
+import { setConnected, setUsers } from '../redux/webSocketSlice';
 import { Dispatch } from '@reduxjs/toolkit';
+import { notification } from 'antd';
 
 
 let stompClient: Client | null = null;
@@ -39,7 +40,7 @@ export function connect(dispatch: Dispatch, userId: number): Promise<Client> {
     stompClient.connect({}, (frame) => {
       console.log("WebSocket connected:", frame);
       resolve(stompClient!);
-
+      dispatch(setConnected(stompClient?.connected))
       getAllActiveUsers(dispatch);
 
       stompClient!.send("/ws/getusers");
@@ -48,28 +49,35 @@ export function connect(dispatch: Dispatch, userId: number): Promise<Client> {
       subscribeToNotifications(userId);
     }, (error) => {
       console.log("WebSocket error:", error);
+      notification.error({
+        message: 'WebSocket Connection Error',
+        description: 'Failed to connect to WebSocket server. Please try again later.',
+        placement: "bottom"
+      });
       reject(error);
     });
   });
 }
 
-export function subscribeToRoom(roomId: string, messageHandler: (message: Message) => void) {
+export function subscribeToRoom(roomId: number, messageHandler: (message: Message) => void) {
   if (stompClient && stompClient.connected) {
+    console.log("ide is eljon?");
     const subscription = stompClient.subscribe(`/topic/${roomId}`, messageHandler);
     subscriptions[roomId] = subscription;
     console.log(`Subscribed to room asd ${roomId}`);
   }
 }
 
-export function unsubscribeFromRoom(roomId: number) {
+export function unsubscribeFromRoom(roomId: number, dispatch: Dispatch) {
   if (subscriptions[roomId]) {
     subscriptions[roomId].unsubscribe();
     delete subscriptions[roomId];
     console.log(`Unsubscribed from room ${roomId}`);
+    dispatch(setConnected(false))
   }
 }
 
-export function sendMessage(roomId: number, message: any) {
+export function sendMessage(roomId: number, message: Message) {
   if (!stompClient || !stompClient.connected) {
     throw new Error("WebSocket not connected");
   }

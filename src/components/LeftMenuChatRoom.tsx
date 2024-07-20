@@ -2,8 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ChatRoom } from '../types/globalTypes'
 import moment from 'moment'
 import img from "../assets/test.jpg"
-import { UserStore } from '../store/store'
-import { useSelector } from 'react-redux'
+import useRoomName from '../hooks/useRoomName'
 
 type LeftMenuChatRoomProps = {
     room: ChatRoom
@@ -11,11 +10,10 @@ type LeftMenuChatRoomProps = {
 
 export const LeftMenuChatRoom = ({ room }: LeftMenuChatRoomProps) => {
     const navigate = useNavigate();
-    const { user } = useSelector((state: UserStore) => state.userStore);
 
     const lastMessage = room.lastMessage ? room.lastMessage.text : "No messages yet";
     const createdAt = room.lastMessage?.createdAt ? moment(room.lastMessage?.createdAt).fromNow() : "";
-    const roomName = room.participants && room.participants.length > 0 ? room.participants[0].firstName + " " + room.participants[0].lastName : "";
+    const roomName = useRoomName({ participants: room.participants });
 
     return (
         <li className="group" key={room.id} onClick={() => navigate(`/chat/${room.id}`)}>

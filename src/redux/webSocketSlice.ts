@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const webSocketSlice = createSlice({
-    name: 'activeUsers',
+    name: 'webSocket',
     initialState: {
         activeUsers: [],
-        socket: {}
+        connected: false,
     },
     reducers: {
         setUsers: (state, action) => {
@@ -16,11 +16,11 @@ const webSocketSlice = createSlice({
         removeUser: (state, action) => {
             state.activeUsers = state.activeUsers.filter(user => user !== action.payload);
         },
-        setSocket: (state, action) => {
-            state.socket = action.payload;
+        setConnected: (state, action) => {
+            state.connected = action.payload;
         },
     }
 });
 
-export const { setUsers, addUser, removeUser, setSocket } = webSocketSlice.actions;
+export const { setUsers, addUser, removeUser, setConnected } = webSocketSlice.actions;
 export default webSocketSlice.reducer;

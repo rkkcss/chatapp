@@ -1,8 +1,13 @@
 import { BsThreeDots } from "react-icons/bs"
 import img from "../assets/test.jpg"
 import { Button, Dropdown, MenuProps } from "antd"
+import { useSelector } from "react-redux";
+import { WebSocketStore } from "../store/store";
+import useRoomName from "../hooks/useRoomName";
 
 export const ChatHeader = () => {
+    const { selectedRoom, activeUsers } = useSelector((state: WebSocketStore) => state.webSocketStore);
+    const roomName = useRoomName({ participants: selectedRoom?.participants });
 
     const items: MenuProps['items'] = [
         {
@@ -26,7 +31,7 @@ export const ChatHeader = () => {
         <div className="flex items-center backdrop-filter backdrop-blur-lg bg-white/40 p-4 shadow-sm">
             <img src={img} alt="img" className="w-14 h-14 rounded-md" />
             <div className="ml-3">
-                <p className="font-bold text-slate-800">{ }</p>
+                <p className="font-bold text-slate-800">{roomName}</p>
                 <p className="text-xs text-green-500 ">Active</p>
             </div>
 

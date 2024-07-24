@@ -14,13 +14,25 @@ const useWebSocket = () => {
     const [subscription, setSubscription] = useState<Subscription | null>(null);
 
     useEffect(() => {
+        setConnected(stompClient?.connected ? true : false);
+    }, [stompClient?.connected])
+
+    useEffect(() => {
         const socket = new SockJS('http://localhost:8080/ws/connect');
         const client: Client = over(socket);
         setStompClient(client);
 
         client.connect({}, frame => {
             console.log('WebSocket connected:', frame);
-            setConnected(true);
+
+            // Set the connected state to the current WebSocket connection state
+            // ugly but necessary
+            setConnected(prev => {
+                if (!prev) {
+                    return !prev;
+                }
+                return prev;
+            });
 
             client.send('/app/ws/getusers');
 
@@ -43,10 +55,12 @@ const useWebSocket = () => {
         });
 
         return () => {
-            client.disconnect(() => {
-                console.log('WebSocket disconnected');
-                setConnected(false);
-            });
+            if (client.connected) {
+                client.disconnect(() => {
+                    console.log('WebSocket disconnected');
+                    setConnected(false);
+                });
+            }
         };
     }, []);
 
@@ -65,13 +79,13 @@ const useWebSocket = () => {
         }
     };
 
-    const unsubscribeFromRoom = (roomId: number) => {
+    const unsubscribeFromRoom = () => {
         // const { roomId } = action.payload;
 
         if (subscription) {
             subscription.unsubscribe();
             setSubscription(null);
-            console.log(`Unsubscribed from room: ` + roomId);
+            console.log(`Unsubscribed from room: ` + subscription.id);
         }
     }
 

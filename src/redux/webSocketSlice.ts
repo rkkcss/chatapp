@@ -1,12 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { User } from './userSlice';
+import { ChatRoom } from '../types/globalTypes';
 
 export type WebSocketState = {
     activeUsers: User[];
+    selectedRoom: ChatRoom | null
 };
 
 const initialState: WebSocketState = {
     activeUsers: [],
+    selectedRoom: null,
 };
 
 const webSocketSlice = createSlice({
@@ -22,8 +25,11 @@ const webSocketSlice = createSlice({
         removeUser: (state, action) => {
             state.activeUsers = state.activeUsers.filter(user => user !== action.payload);
         },
+        setRoom: (state, action) => {
+            state.selectedRoom = action.payload;
+        }
     }
 });
 
-export const { setUsers, addUser, removeUser } = webSocketSlice.actions;
+export const { setUsers, addUser, removeUser, setRoom } = webSocketSlice.actions;
 export default webSocketSlice.reducer;

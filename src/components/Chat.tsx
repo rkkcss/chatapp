@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { API } from "../utils/API";
 import { ChatMessage } from "../types/globalTypes";
 import { useSelector } from "react-redux";
-import { UserStore } from "../store/store";
+import { UserStore, WebSocketStore } from "../store/store";
 import moment from "moment";
 import { ChatHeader } from "./ChatHeader";
 import useWebSocket from "../hooks/useWebSocket";
@@ -19,6 +19,7 @@ export const Chat = () => {
     const params = useParams();
     const numberRoomId = Number(params.roomId)
     const { user } = useSelector((state: UserStore) => state.userStore);
+    const { selectedRoom } = useSelector((state: WebSocketStore) => state.webSocketStore);
     const { sendMessage, connected, subscribeToRoom, unsubscribeFromRoom } = useWebSocket();
 
     const messageOnChange = (value: string) => {
@@ -38,13 +39,15 @@ export const Chat = () => {
     }
 
     useEffect(() => {
+        console.log("CONNECT", connected);
         if (connected) {
             subscribeToRoom(numberRoomId, messageHandler);
         }
+
         return () => {
-            unsubscribeFromRoom(numberRoomId)
-        }
-    }, [numberRoomId, connected])
+            unsubscribeFromRoom();
+        };
+    }, [connected, numberRoomId]);
 
     const sendMessage2 = () => {
         const chatMessage: ChatMessage = { text: newMessage.text, chatRoom: { id: numberRoomId } };

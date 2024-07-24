@@ -6,15 +6,16 @@ export type PublicUser = {
     login: string;
 }
 
-export type Message = {
+export type ChatMessage = {
     id?: number;
     user?: PublicUser,
     text?: string,
-    createdAt?: string
+    createdAt?: string,
+    chatRoom?: ChatRoom
 }
 
 export type ChatRoom = {
     id: number;
-    lastMessage?: Message
+    lastMessage?: ChatMessage
     participants?: PublicUser[]
 }

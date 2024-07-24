@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { API } from "../utils/API";
 import { APILogin } from "../utils/APILogin";
 
@@ -41,11 +41,16 @@ export const getAccountInfo = createAsyncThunk<User>(
     }
 );
 
-export const loginUser = createAsyncThunk(
-    "loginUser",
-    async (user, { dispatch }) => {
-        await APILogin.post("/api/authentication", user);
+export const loginUser = createAsyncThunk<User, User>(
+    'loginUser',
+    async (user: User, { dispatch }) => {
+        // Az API hívás a felhasználó bejelentkezéséhez
+        await APILogin.post('/api/authentication', user);
+
+        // Dispatch a további akciókat
         dispatch(getAccountInfo());
+
+        // Visszaadja a felhasználói adatokat
         return user;
     }
 );

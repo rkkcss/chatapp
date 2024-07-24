@@ -1,4 +1,3 @@
-// src/store.ts
 import { configureStore } from '@reduxjs/toolkit';
 import loginSliceReducer from '../redux/userSlice';
 import webSocketSliceReducer from '../redux/webSocketSlice';

@@ -4,22 +4,22 @@ import { LuSendHorizonal } from "react-icons/lu";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { API } from "../utils/API";
-import { Message } from "../types/globalTypes";
-import { useDispatch, useSelector } from "react-redux";
-import { UserStore, WebSocketStore } from "../store/store";
+import { ChatMessage } from "../types/globalTypes";
+import { useSelector } from "react-redux";
+import { UserStore } from "../store/store";
 import moment from "moment";
-import { sendMessage, subscribeToRoom, unsubscribeFromRoom } from "../utils/WebSocket";
 import { ChatHeader } from "./ChatHeader";
+import useWebSocket from "../hooks/useWebSocket";
+import { Message } from "webstomp-client";
 
 
 export const Chat = () => {
-    const [newMessage, setNewMessage] = useState<Message>({});
-    const [messages, setMessages] = useState<Message[]>([]);
+    const [newMessage, setNewMessage] = useState<ChatMessage>({});
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
     const params = useParams();
     const numberRoomId = Number(params.roomId)
     const { user } = useSelector((state: UserStore) => state.userStore);
-    const { connected } = useSelector((state: WebSocketStore) => state.webSocketStore)
-    const dispatch = useDispatch();
+    const { sendMessage, connected, subscribeToRoom, unsubscribeFromRoom } = useWebSocket();
 
     const messageOnChange = (value: string) => {
         console.log(value);
@@ -29,51 +29,32 @@ export const Chat = () => {
     useEffect(() => {
         API.get(`/api/messages/${numberRoomId}`).then(res => {
             setMessages(res.data);
-            console.log(res);
         });
     }, [numberRoomId]);
 
+    const messageHandler = (message: Message) => {
+        const chatMessage = JSON.parse(message.body);
+        setMessages((prevMessages) => [chatMessage, ...prevMessages]);
+    }
+
     useEffect(() => {
-        console.log("false", connected);
         if (connected) {
-            console.log("true", connected);
-            subscribeToRoom(numberRoomId, (message) => {
-                const chatMessage = JSON.parse(message.body);
-                console.log("NANANNA", message);
-                setMessages((prevMessages) => [chatMessage, ...prevMessages]);
-            });
+            subscribeToRoom(numberRoomId, messageHandler);
         }
-
         return () => {
-            if (numberRoomId) {
-                unsubscribeFromRoom(numberRoomId as number, dispatch);
-            }
-
+            unsubscribeFromRoom(numberRoomId)
         }
     }, [numberRoomId, connected])
 
     const sendMessage2 = () => {
-        // const message = { text: newMessage };
-        sendMessage(numberRoomId, { ...newMessage, chatRoom: { id: numberRoomId } });
+        const chatMessage: ChatMessage = { text: newMessage.text, chatRoom: { id: numberRoomId } };
+        sendMessage(numberRoomId, chatMessage);
         setNewMessage(prev => ({ ...prev, text: "" }));
     };
-
-    // const handleSendMessage = () => {
-    //     API.post(`/api/messages`, {
-    //         ...newMessage,
-    //         chatRoom: {
-    //             id: numberRoomId,
-    //         }
-    //     }).then(res => {
-    //         setMessages([res.data, ...messages]);
-    //         setNewMessage({});
-    //     })
-    // }
 
     return (
         <div className="flex flex-col flex-grow">
             <ChatHeader />
-
             <div className="overflow-auto p-4 h-full max-h-[calc(100vh-64px-88px-96px)] flex flex-col-reverse">
                 {messages.map((message) => {
 

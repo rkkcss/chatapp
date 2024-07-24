@@ -1,31 +1,22 @@
 import { Outlet } from "react-router"
 import { LayoutHeader } from "../components/LayoutHeader"
-import { useEffect } from "react";
-import { connect, disconnect } from "../utils/WebSocket";
-import { useDispatch, useSelector } from "react-redux";
-import { UserStore } from "../store/store";
+import useWebSocket from "../hooks/useWebSocket";
 
 export const Layout = () => {
-    const dispatch = useDispatch();
-    const { user } = useSelector((state: UserStore) => state.userStore)
-
-    useEffect(() => {
-        if (user?.id !== undefined) {
-            connect(dispatch, user?.id);
-        }
-
-        return () => {
-            // unsubscribe from the topic when the component unmounts
-            disconnect()
-        }
-    }, [])
+    const { connected } = useWebSocket();
 
     return (
         <>
-            <div>
-                <LayoutHeader />
-            </div>
-            <Outlet />
+            {
+                connected ?
+                    <>
+                        <div>
+                            <LayoutHeader />
+                        </div>
+                        <Outlet />
+                    </>
+                    : <p>Websocket Not Connected</p>
+            }
         </>
     )
 }

@@ -24,7 +24,7 @@ export const Login = () => {
         }
     }, [user]);
 
-    const handleForm = (formData: any) => {
+    const handleForm = (formData: User) => {
         console.log(formData);
         dispatch(loginUser(formData));
     }

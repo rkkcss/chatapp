@@ -9,30 +9,19 @@ import { setUsers } from '../redux/webSocketSlice';
 const useWebSocket = () => {
     const [connected, setConnected] = useState(false);
     const [stompClient, setStompClient] = useState<Client | null>(null);
-    const { user } = useSelector((state: UserStore) => state.userStore)
+    const { user } = useSelector((state: UserStore) => state.userStore);
     const dispatch = useDispatch();
     const [subscription, setSubscription] = useState<Subscription | null>(null);
 
     useEffect(() => {
-        setConnected(stompClient?.connected ? true : false);
-    }, [stompClient?.connected])
-
-    useEffect(() => {
         const socket = new SockJS('http://localhost:8080/ws/connect');
         const client: Client = over(socket);
-        setStompClient(client);
+
 
         client.connect({}, frame => {
             console.log('WebSocket connected:', frame);
-
-            // Set the connected state to the current WebSocket connection state
-            // ugly but necessary
-            setConnected(prev => {
-                if (!prev) {
-                    return !prev;
-                }
-                return prev;
-            });
+            setStompClient(client);
+            setConnected(true);
 
             client.send('/app/ws/getusers');
 
@@ -42,37 +31,40 @@ const useWebSocket = () => {
                 console.log("Users updated:", users);
             });
 
-
             client.subscribe(`/user/${user?.id}/queue/notifications`, (message: Message) => {
                 console.log(`Notification for user ${user?.id}: ${message.body}`);
                 // Értesítések kezelése itt
             });
-
-
         }, error => {
             console.error('WebSocket connection error:', error);
-            setConnected(false);
         });
 
         return () => {
-            if (client.connected) {
-                client.disconnect(() => {
+            if (stompClient?.connected) {
+                stompClient.disconnect(() => {
                     console.log('WebSocket disconnected');
                     setConnected(false);
                 });
             }
         };
-    }, []);
+    }, [dispatch]);
 
     const subscribeToRoom = (roomId: number, messageHandler: (message: Message) => void) => {
-        if (stompClient && stompClient.connected) {
-            const roomSub = stompClient.subscribe(`/topic/${roomId}`, messageHandler)
-            setSubscription(roomSub);
+        if (subscription) {
+            unsubscribeFromRoom();
         }
-    }
+        if (connected) {
+            const roomSub = stompClient?.subscribe(`/topic/${roomId}`, messageHandler);
+            if (roomSub) {
+                setSubscription(roomSub);
+            }
+        } else {
+            console.error('WebSocket is not connected');
+        }
+    };
 
     const sendMessage = (roomId: number, message: ChatMessage) => {
-        if (stompClient && connected) {
+        if (stompClient?.connected) {
             stompClient.send(`/app/chat.sendMessage/${roomId}`, JSON.stringify(message));
         } else {
             console.error('WebSocket is not connected');
@@ -80,14 +72,12 @@ const useWebSocket = () => {
     };
 
     const unsubscribeFromRoom = () => {
-        // const { roomId } = action.payload;
-
         if (subscription) {
             subscription.unsubscribe();
             setSubscription(null);
-            console.log(`Unsubscribed from room: ` + subscription.id);
+            console.log(`Unsubscribed from room: ${subscription.id}`);
         }
-    }
+    };
 
     return { sendMessage, connected, subscribeToRoom, unsubscribeFromRoom };
 };

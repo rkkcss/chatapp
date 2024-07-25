@@ -20,7 +20,7 @@ export const Chat = () => {
     const numberRoomId = Number(params.roomId)
     const { user } = useSelector((state: UserStore) => state.userStore);
     const { selectedRoom } = useSelector((state: WebSocketStore) => state.webSocketStore);
-    const { sendMessage, connected, subscribeToRoom, unsubscribeFromRoom } = useWebSocket();
+    const { sendMessage, connected, subscribeToRoom, unsubscribeFromRoom, stompClient } = useWebSocket();
 
     const messageOnChange = (value: string) => {
         console.log(value);
@@ -39,7 +39,6 @@ export const Chat = () => {
     }
 
     useEffect(() => {
-        console.log("CONNECT", connected);
         if (connected) {
             subscribeToRoom(numberRoomId, messageHandler);
         }

@@ -1,9 +1,14 @@
 import { Outlet } from "react-router"
 import { LayoutHeader } from "../components/LayoutHeader"
 import useWebSocket from "../hooks/useWebSocket";
+import { Spin } from "antd";
 
 export const Layout = () => {
     const { connected } = useWebSocket();
+
+    const reconnect = () => {
+
+    }
 
     return (
         <>
@@ -15,7 +20,8 @@ export const Layout = () => {
                         </div>
                         <Outlet />
                     </>
-                    : <p>Websocket Not Connected</p>
+                    :
+                    <Spin fullscreen />
             }
         </>
     )

@@ -4,6 +4,7 @@ export type PublicUser = {
     firstName: string;
     lastName: string;
     login: string;
+    imageUrl: string;
 }
 
 export type ChatMessage = {

@@ -10,7 +10,7 @@ export type User = {
     password?: string;
     firstName?: string;
     lastName?: string;
-    imageUrl?: string;
+    imageUrl: string;
     activated?: boolean;
     langKey?: string;
     createdDate?: Date;
@@ -80,6 +80,9 @@ const loginSlice = createSlice({
         toggleTheme(state, action: PayloadAction<string>) {
             state.theme = action.payload;
         },
+        setImageUrl(state, action: PayloadAction<string>) {
+            state.user = ({ ...state.user, imageUrl: action.payload })
+        }
     },
     extraReducers(builder) {
         builder
@@ -124,6 +127,6 @@ const loginSlice = createSlice({
     },
 });
 
-export const { loadingTrue, loadingFalse, toggleTheme } = loginSlice.actions;
+export const { loadingTrue, loadingFalse, toggleTheme, setImageUrl } = loginSlice.actions;
 
 export default loginSlice.reducer;

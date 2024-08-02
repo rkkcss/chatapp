@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import loginSliceReducer from '../redux/userSlice';
 import webSocketSliceReducer from '../redux/webSocketSlice';
+import generalSliceReducer from '../redux/generalSlice';
 import {
     persistStore,
     persistReducer,
@@ -25,13 +26,21 @@ const webSocketPersistConfig = {
     blacklist: ['error'],
 };
 
+const generalPersistConfig = {
+    key: 'general',
+    storage,
+    blacklist: ['error'],
+};
+
 const persistedLoginReducer = persistReducer(loginPersistConfig, loginSliceReducer);
 const persistedWebSocketReducer = persistReducer(webSocketPersistConfig, webSocketSliceReducer);
+const persistedGeneralReducer = persistReducer(generalPersistConfig, generalSliceReducer);
 
 const store = configureStore({
     reducer: {
         userStore: persistedLoginReducer,
         webSocketStore: persistedWebSocketReducer,
+        generalStore: persistedGeneralReducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
@@ -48,4 +57,5 @@ export default store;
 
 export type UserStore = ReturnType<typeof store.getState>;
 export type WebSocketStore = ReturnType<typeof store.getState>;
+export type GeneralStore = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

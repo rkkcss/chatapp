@@ -70,7 +70,7 @@ export const Login = () => {
                                     </Form.Item>
                                 </Form>
                                 <Divider>or</Divider>
-                                <Button className="w-full" size="large" type="default">Register</Button>
+                                <Button className="w-full" size="large" type="default" onClick={() => navigate("/registration")}>Register</Button>
                             </div>
 
                         </div>

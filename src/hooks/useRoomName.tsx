@@ -15,7 +15,11 @@ const useRoomName = ({ participants = [] }: useRoomNameProps) => {
 
     const otherParticipants = participants.filter(
         participant => participant.id !== user.id
-    );
+    ).sort((a: User, b: User) => {
+        const firstNameA = a.firstName || ''; // Ha firstName undefined, akkor üres stringként kezeljük
+        const firstNameB = b.firstName || '';
+        return firstNameA.localeCompare(firstNameB);
+    });
 
     if (otherParticipants.length === 0) {
         return 'No Other Participants'; // Vagy bármilyen alapértelmezett érték

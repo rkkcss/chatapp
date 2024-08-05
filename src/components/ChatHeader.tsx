@@ -5,6 +5,7 @@ import { GeneralStore, WebSocketStore } from "../store/store";
 import useRoomName from "../hooks/useRoomName";
 import { FaInfo } from "react-icons/fa";
 import { toggleChatRightSide } from "../redux/generalSlice";
+import { ChatRoomImage } from "./ChatRoomImage";
 
 export const ChatHeader = () => {
     const { selectedRoom } = useSelector((state: WebSocketStore) => state.webSocketStore);
@@ -14,7 +15,8 @@ export const ChatHeader = () => {
 
     return (
         <div className="flex items-center backdrop-filter backdrop-blur-lg bg-white/40 p-4 shadow-sm">
-            <img src={img} alt="img" className="w-14 h-14 rounded-md" />
+            <ChatRoomImage participants={selectedRoom?.participants} />
+            {/* <img src={img} alt="img" className="w-14 h-14 rounded-md" /> */}
             <div className="ml-3">
                 <p className="font-bold text-slate-800">{roomName}</p>
                 <p className="text-xs text-green-500 ">Active</p>

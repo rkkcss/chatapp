@@ -5,6 +5,7 @@ import img from "../assets/test.jpg"
 import useRoomName from '../hooks/useRoomName'
 import { useDispatch } from 'react-redux'
 import { setRoom } from '../redux/webSocketSlice'
+import { ChatRoomImage } from './ChatRoomImage'
 
 type LeftMenuChatRoomProps = {
     room: ChatRoom
@@ -26,7 +27,10 @@ export const LeftMenuChatRoom = ({ room }: LeftMenuChatRoomProps) => {
     return (
         <li className="group" key={room.id} onClick={roomOnClickHandler}>
             <Link to="#" className="flex items-center p-4 gap-2 hover:bg-slate-100 rounded-md">
-                <img src={img} alt="img" className="w-10 h-10 rounded-md" />
+                {/* <img src={img} alt="img" className="w-10 h-10 rounded-md" /> */}
+                <div>
+                    <ChatRoomImage participants={room.participants} />
+                </div>
                 <div className="w-full">
                     <p className="text-slate-800 font-semibold text-sm">{roomName}</p>
                     <p className="text-xs text-slate-500 flex justify-between">

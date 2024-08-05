@@ -11,6 +11,7 @@ export type ChatMessage = {
     id?: number;
     user?: PublicUser,
     text?: string,
+    mediaUrl?: string;
     createdAt?: string,
     chatRoom?: ChatRoom
 }

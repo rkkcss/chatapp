@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { ChatRoom } from '../types/globalTypes'
 import moment from 'moment'
-import img from "../assets/test.jpg"
 import useRoomName from '../hooks/useRoomName'
 import { useDispatch } from 'react-redux'
 import { setRoom } from '../redux/webSocketSlice'

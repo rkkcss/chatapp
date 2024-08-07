@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUsers } from '../redux/webSocketSlice';
 import { ChatMessage } from '../types/globalTypes';
 import { UserStore } from '../store/store';
-import { API } from '../utils/API';
 import { getAccountInfo } from '../redux/userSlice';
 
 interface WebSocketContextType {

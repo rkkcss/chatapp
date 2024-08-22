@@ -1,20 +1,30 @@
-import img from "../assets/test.jpg"
-import { Button } from "antd"
+import { Button, Tooltip } from "antd"
 import { useDispatch, useSelector } from "react-redux";
 import { GeneralStore, WebSocketStore } from "../store/store";
 import useRoomName from "../hooks/useRoomName";
-import { FaInfo } from "react-icons/fa";
+import { FaAngleLeft, FaInfo } from "react-icons/fa";
 import { toggleChatRightSide } from "../redux/generalSlice";
 import { ChatRoomImage } from "./ChatRoomImage";
+import { useNavigate } from "react-router";
+import { setRoom } from "../redux/webSocketSlice";
 
 export const ChatHeader = () => {
     const { selectedRoom } = useSelector((state: WebSocketStore) => state.webSocketStore);
     const roomName = useRoomName({ participants: selectedRoom?.participants });
     const dispatch = useDispatch();
     const { chatRigthSideOpen } = useSelector((state: GeneralStore) => state.generalStore);
+    const navigate = useNavigate();
+
+    const handleBackToChat = () => {
+        dispatch(setRoom(null));
+        navigate("/chat");
+    }
 
     return (
         <div className="flex items-center backdrop-filter backdrop-blur-lg bg-white/40 p-4 shadow-sm">
+            <Tooltip title="Vissza" placement="bottom" className={`block md:hidden`}>
+                <Button icon={<FaAngleLeft size={28} className="text-slate-800" />} className="mr-3" type="text" onClick={handleBackToChat} />
+            </Tooltip>
             <ChatRoomImage participants={selectedRoom?.participants} />
             {/* <img src={img} alt="img" className="w-14 h-14 rounded-md" /> */}
             <div className="ml-3">

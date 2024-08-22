@@ -33,8 +33,8 @@ export const Login = () => {
         <>
             <div className="w-screen h-screen bg-slate-100">
                 <div className="flex items-center justify-center h-full">
-                    <div className="w-[70vw] lg:max-w-[1024px] p-16 bg-neutral-50/40 shadow-lg rounded-2xl flex justify-center ">
-                        <div className="w-[489px]">
+                    <div className="w-[90vw] md:max-w-[80vw] lg:max-w-[680px] md:p-16 p-6 bg-neutral-50/40 shadow-lg rounded-2xl flex justify-center ">
+                        <div className="min-w-full w-[489px]">
                             <div className="mb-16 text-center">
                                 <h1 className="text-5xl font-medium text-slate-800">
                                     Log in to

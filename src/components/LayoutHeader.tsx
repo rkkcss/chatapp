@@ -1,10 +1,10 @@
 import { Dropdown, Tooltip } from "antd"
 import { Header } from "antd/es/layout/layout"
 import { LuHome, LuMessageSquare } from "react-icons/lu"
-import { RxAvatar } from "react-icons/rx"
 import { Link, useNavigate } from "react-router-dom"
 import type { MenuProps } from "antd"
 import { IoMdNotificationsOutline } from "react-icons/io"
+import { FiUser } from "react-icons/fi"
 
 export const LayoutHeader = () => {
     const navigate = useNavigate();
@@ -12,12 +12,14 @@ export const LayoutHeader = () => {
         {
             key: 1,
             icon: <LuHome size={26} />,
-            label: "Home"
+            label: "Home",
+            url: "/"
         },
         {
             key: 2,
             icon: <LuMessageSquare size={26} />,
-            label: "Messages"
+            label: "Messages",
+            url: "/chat"
         }
     ]
 
@@ -44,7 +46,7 @@ export const LayoutHeader = () => {
                     menuItems.map((item) => (
                         <li key={item.key} className="flex items-center">
                             <Tooltip placement="bottom" title={item.label}>
-                                <Link to="#" className="p-2 w-fit bg-slate-200 rounded-full ">
+                                <Link to={item.url} className="p-2 w-fit bg-slate-200 rounded-full ">
                                     {item.icon}
                                 </Link>
                             </Tooltip>
@@ -59,7 +61,7 @@ export const LayoutHeader = () => {
                 <li className=" flex items-center">
                     <Dropdown trigger={["click"]} menu={{ items }}>
                         <a onClick={(e) => e.preventDefault()} className=" w-fit p-2 bg-slate-100 rounded-full">
-                            <RxAvatar size={28} />
+                            <FiUser size={28} />
                         </a>
                     </Dropdown>
                 </li>

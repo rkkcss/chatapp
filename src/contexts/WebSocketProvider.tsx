@@ -2,7 +2,7 @@ import { createContext, useCallback, useEffect, useState, ReactNode, useRef } fr
 import SockJS from 'sockjs-client';
 import { over, Client, Message, Subscription } from 'webstomp-client';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUsers } from '../redux/webSocketSlice';
+import { setRoom, setUsers } from '../redux/webSocketSlice';
 import { ChatMessage } from '../types/globalTypes';
 import { UserStore } from '../store/store';
 import { getAccountInfo } from '../redux/userSlice';
@@ -12,6 +12,7 @@ interface WebSocketContextType {
     connected: boolean;
     subscribeToRoom: (roomId: number, messageHandler: (message: Message) => void) => void;
     unsubscribeFromRoom: (roomId: number) => void;
+    messageNotification: ChatMessage
 }
 
 const defaultValue: WebSocketContextType = {
@@ -19,6 +20,7 @@ const defaultValue: WebSocketContextType = {
     connected: false,
     subscribeToRoom: () => { },
     unsubscribeFromRoom: () => { },
+    messageNotification: {}
 };
 
 const WebSocketContext = createContext<WebSocketContextType>(defaultValue);
@@ -29,15 +31,17 @@ interface WebSocketProviderProps {
 
 export const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
     const [connected, setConnected] = useState(false);
+    const [messageNotification, setMessageNotification] = useState({});
     const subscription = useRef<Subscription | null>(null);
     const client = useRef<Client | null>(null);
+
     const { user } = useSelector((state: UserStore) => state.userStore);
     const dispatch = useDispatch();
 
     const connect = useCallback(() => {
         if (connected) return;
 
-        const socket = new SockJS("http://localhost:8080/ws/connect");
+        const socket = new SockJS("http://192.168.0.69:8080/ws/connect");
         const stompClient = over(socket);
 
         stompClient.connect({ "accept-version": "1.1,1.2" }, frame => {
@@ -55,6 +59,7 @@ export const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
             stompClient.subscribe(`/user/${user?.id}/queue/notifications`, (message: Message) => {
                 console.log(`Notification for user ${user?.id}: ${message.body}`);
                 // Értesítések kezelése itt
+                setMessageNotification(JSON.parse(message.body));
             });
             setConnected(true)
         }, error => {
@@ -103,6 +108,7 @@ export const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
             console.log(`Unsubscribed from room: ${subscription.current?.id}`);
             subscription.current = null;
         }
+        // dispatch(setRoom({}))
     }, [subscription]);
 
     const sendMessage = useCallback((roomId: number, message: ChatMessage) => {
@@ -114,7 +120,7 @@ export const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
     }, []);
 
     return (
-        <WebSocketContext.Provider value={{ sendMessage, connected, subscribeToRoom, unsubscribeFromRoom }}>
+        <WebSocketContext.Provider value={{ sendMessage, connected, subscribeToRoom, unsubscribeFromRoom, messageNotification }}>
             {children}
         </WebSocketContext.Provider>
     );

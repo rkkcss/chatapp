@@ -10,9 +10,10 @@ import { Link } from 'react-router-dom'
 type NewChatProps = {
     isOpen: boolean,
     onClose: () => void,
+    setNewChatRoom: (chatRoom: ChatRoom | null) => void,
 }
 
-export const NewChatModal = ({ isOpen, onClose }: NewChatProps) => {
+export const NewChatModal = ({ isOpen, onClose, setNewChatRoom }: NewChatProps) => {
     const [findUsers, setFindUsers] = useState<User[]>([]);
     const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
 
@@ -39,8 +40,10 @@ export const NewChatModal = ({ isOpen, onClose }: NewChatProps) => {
             notification.warning({ message: "Select at least one user.", placement: "bottom" })
             return
         }
-        API.post("/api/chat-rooms/create", selectedUsers).then(res => {
-            console.log(res);
+        API.post("/api/chat-rooms/create", selectedUsers).then((res) => {
+            console.log("new room", res);
+            notification.success({ message: "Room successfully created.", placement: "bottom" });
+            setNewChatRoom(res.data)
         }).catch(err => {
             if (err.response.status === 302) {
                 setRoomAlreadyExists(err.response.data);
@@ -53,11 +56,19 @@ export const NewChatModal = ({ isOpen, onClose }: NewChatProps) => {
             setFindUsers([]);
             setSelectedUsers([]);
             setRoomAlreadyExists(null);
+            setNewChatRoom(null);
         }
     }, [isOpen]);
 
     return (
-        <Modal onCancel={onClose} open={isOpen} width="50vw" title="Create chat" onOk={handleCreateRoom} okText="Create room">
+        <Modal onCancel={onClose}
+            open={isOpen}
+            width="70vw"
+            className="max-w-[800px] min-w-[375px]"
+            title="Create chat" onOk={handleCreateRoom}
+            okText="Create room"
+            maskClosable={false}
+        >
             <Alert
                 message="You can search and create new chat rooms."
                 type="info"
@@ -73,6 +84,7 @@ export const NewChatModal = ({ isOpen, onClose }: NewChatProps) => {
                 onChange={e => onChangeHandler(e)}
                 options={findUsers}
                 value={selectedUsers}
+                placeholder="Message to..."
                 fieldNames={{ label: "firstName", value: "id" }}
             />
             {

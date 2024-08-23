@@ -22,7 +22,6 @@ export const LeftMenuChatRoom = ({ room }: LeftMenuChatRoomProps) => {
     const { messageNotification } = useContext(WebSocketContext);
 
     useEffect(() => {
-        console.log("ITT IS VAN", messageNotification);
         if (room.id === messageNotification.chatRoom?.id) {
             setLastMessage(messageNotification);
         }

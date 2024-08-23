@@ -75,7 +75,7 @@ export const UploadImageModal = ({ open, onClose, imageURL }: UploadImageModalPr
                 <Upload customRequest={handleImageUpload} listType="picture-circle" showUploadList={false} className="!flex justify-center">
                     {
                         uploadImage ? (
-                            <img src={uploadImage} alt="Your profile image" className="h-full rounded-full object-cover p-1" />
+                            <img src={uploadImage} alt="Your profile image" className="h-full rounded-full w-full object-cover p-1" />
                         ) :
                             <button type="button" className="bg-none border-none flex flex-col items-center">
                                 {!loading && <FaPlus size={20} />}

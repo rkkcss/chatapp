@@ -1,36 +1,31 @@
-import { Image, Tooltip } from "antd";
 import { useParams } from "react-router";
 import { useContext, useEffect, useState, useCallback } from "react";
 import { API } from "../utils/API";
 import { ChatMessage } from "../types/globalTypes";
-import { useDispatch, useSelector } from "react-redux";
-import { GeneralStore, UserStore, WebSocketStore } from "../store/store";
-import moment from "moment";
+import { useSelector } from "react-redux";
+import { GeneralStore, WebSocketStore } from "../store/store";
 import { ChatHeader } from "./ChatHeader";
 import { Message } from "webstomp-client";
 import { ChatRightSection } from "./ChatRightSection";
 import { WebSocketContext } from "../contexts/WebSocketProvider";
 import { SendMessageSection } from "./SendMessageSection";
 import usePagination from "../hooks/usePagination";
-import { setRoom } from "../redux/webSocketSlice";
+import MessageComp from "./MessageComp";
 
 export const Chat = () => {
     const [messages, setMessages] = useState<Map<string, ChatMessage>>(new Map());
     const params = useParams();
     const numberRoomId = Number(params.roomId);
-    const { user } = useSelector((state: UserStore) => state.userStore);
     const { chatRigthSideOpen } = useSelector((state: GeneralStore) => state.generalStore);
     const { connected, subscribeToRoom, unsubscribeFromRoom } = useContext(WebSocketContext);
     const { selectedRoom } = useSelector((state: WebSocketStore) => state.webSocketStore);
-    const dispatch = useDispatch();
 
-    const { pagination, setPagination, lastElementRef, loading } = usePagination();
+    const { pagination, setPagination, lastElementRef } = usePagination();
 
     const getMessagesQuery = async (pageNumber: number) => {
         await API.get(`/api/messages/${numberRoomId}`, {
             params: { page: pageNumber },
         }).then((res) => {
-            console.log(res.data.content);
             setMessages(
                 (prev) =>
                     new Map([...prev, ...res.data.content.map((msg: ChatMessage) => [msg.id, msg])])
@@ -83,24 +78,11 @@ export const Chat = () => {
                         <ChatHeader />
                         <div className="overflow-auto p-4 h-full max-h-[calc(100vh-64px-88px-96px)] flex flex-col-reverse">
                             {Array.from(messages.values()).map((message, i) => (
-                                <Tooltip key={message.id} placement={message.user?.id === user?.id ? "left" : "right"} title={moment(message.createdAt).fromNow()}>
-                                    {
-                                        i + 1 == messages.size ?
-                                            <div ref={lastElementRef} className={`w-fit my-2 ${message.user?.id === user?.id ? "mr-0 ml-auto" : ""} text-sm`}>
-                                                {message.mediaUrl && <Image src={message.mediaUrl} alt="" className="max-w-72 max-h-72 rounded-xl object-cover mb-1" />}
-                                                <div className={`border ${message.user?.id === user?.id ? "border-neutral-300 text-slate-800" : "bg-violet-600 border-violet-600 text-neutral-50"} w-full p-2 rounded-xl`}>
-                                                    <p>{message.text}</p>
-                                                </div>
-                                            </div> :
-                                            <div className={`w-fit my-2 ${message.user?.id === user?.id ? "mr-0 ml-auto" : ""} text-sm`}>
-                                                {message.mediaUrl && <Image src={message.mediaUrl} alt="" className="max-w-72 max-h-72 rounded-xl object-cover mb-1" />}
-                                                <div className={`border ${message.user?.id === user?.id ? "border-neutral-300 text-slate-800" : "bg-violet-600 border-violet-600 text-neutral-50"} w-full p-2 rounded-xl`}>
-                                                    <p>{message.text}</p>
-                                                </div>
-                                            </div>
-                                    }
-
-                                </Tooltip>
+                                <MessageComp
+                                    message={message}
+                                    lastMessageRef={lastElementRef}
+                                    index={i}
+                                    messagesSize={messages.size} />
                             ))}
                         </div>
                         <div className="p-4 gap-5 h-24 flex items-center">

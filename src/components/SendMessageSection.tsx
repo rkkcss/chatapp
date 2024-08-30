@@ -20,6 +20,9 @@ export const SendMessageSection = () => {
 
     //Send message to the room
     const sendMessageHandler = () => {
+        if (!newMessage.text && !newMessage.mediaUrl) {
+            return;
+        }
         const chatMessage: ChatMessage = { text: newMessage.text, mediaUrl: newMessage.mediaUrl, chatRoom: { id: numberRoomId } };
         sendMessage(numberRoomId, chatMessage);
         setNewMessage(prev => ({ ...prev, text: "", mediaUrl: "" }));
@@ -47,6 +50,12 @@ export const SendMessageSection = () => {
         setNewMessage({ ...newMessage, text: value });
     };
 
+    const handleEnterClicked = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            sendMessageHandler();
+        }
+    };
+
     return (
         <>
             <Upload customRequest={handleImageUpload} showUploadList={false}>
@@ -71,10 +80,16 @@ export const SendMessageSection = () => {
                     </Popover>
                 }
                 <div className="w-full flex items-center">
-                    <Input placeholder="Aa" size="large" onChange={(e) => messageOnChange(e.target.value)} value={newMessage.text} />
+                    <Input placeholder="Aa" size="large"
+                        onChange={(e) => messageOnChange(e.target.value)}
+                        onKeyDown={(e) => handleEnterClicked(e)}
+                        value={newMessage.text}
+                    />
                 </div>
             </div>
-            <Button icon={<LuSendHorizonal />} type="default" size="large" onClick={sendMessageHandler} />
+            <div>
+                <Button icon={<LuSendHorizonal />} type="default" size="large" onClick={sendMessageHandler} />
+            </div>
         </>
     )
 }

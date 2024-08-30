@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { WebSocketContext } from "../contexts/WebSocketProvider";
 import { setRoom } from "../redux/webSocketSlice";
 import { TiMessages } from "react-icons/ti";
+import { useParams } from "react-router";
 
 export const LeftMenu = () => {
     const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
@@ -18,14 +19,17 @@ export const LeftMenu = () => {
     const { selectedRoom } = useSelector((state: WebSocketStore) => state.webSocketStore);
     const { messageNotification } = useContext(WebSocketContext);
     const dispatch = useDispatch();
+    const { roomId } = useParams();
 
     useEffect(() => {
         API.get("/api/chat-rooms").then((res) => {
-            console.log(res);
             setChatRooms(res.data);
         })
         return () => {
-            dispatch(setRoom(null));
+            // Reset selected room when navigating to a different room or reload page
+            if (!roomId) {
+                dispatch(setRoom(null));
+            }
         }
     }, [])
 

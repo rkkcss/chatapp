@@ -40,9 +40,7 @@ export const LeftMenu = () => {
             if (targetRoomIndex !== -1) {
                 const targetRoom = updatedChatRooms[targetRoomIndex];
                 updatedChatRooms.splice(targetRoomIndex, 1);
-
                 updatedChatRooms.unshift({ ...targetRoom, lastMessage: messageNotification });
-                console.log("MSWE", updatedChatRooms);
                 setChatRooms(updatedChatRooms);
             }
         }

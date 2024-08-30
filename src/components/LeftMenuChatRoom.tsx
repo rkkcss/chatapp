@@ -45,7 +45,7 @@ export const LeftMenuChatRoom = ({ room }: LeftMenuChatRoomProps) => {
                 <div className="w-full">
                     <p className="text-slate-800 font-semibold text-sm">{roomName}</p>
                     <p className="text-xs text-slate-500 flex justify-between">
-                        <span>{lastMessage?.text}</span>
+                        <span className="truncate max-w-[10rem]">{lastMessage?.text}</span>
                         <span>{lastMessage?.createdAt ? moment(room.lastMessage?.createdAt).fromNow() : ""}</span>
                     </p>
                 </div>

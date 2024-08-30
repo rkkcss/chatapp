@@ -1,7 +1,7 @@
 import { Dropdown, Tooltip } from "antd"
 import { Header } from "antd/es/layout/layout"
 import { LuMessageSquare } from "react-icons/lu"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import type { MenuProps } from "antd"
 import { FiUser } from "react-icons/fi"
 import { BiBell } from "react-icons/bi"
@@ -10,6 +10,8 @@ import { TbMessage } from "react-icons/tb"
 
 export const LayoutHeader = () => {
     const navigate = useNavigate();
+    const { pathname } = useLocation();
+
     const menuItems = [
         {
             key: 1,
@@ -68,7 +70,12 @@ export const LayoutHeader = () => {
                     menuItems.map((item) => (
                         <li key={item.key} className="flex items-center">
                             <Tooltip placement="bottom" title={item.label}>
-                                <Link to={item.url} className="p-2 w-fit bg-slate-200 rounded-full ">
+                                <Link reloadDocument={false} to={item.url}
+                                    className={`p-2 w-fit bg-slate-200 rounded-full 
+                                    ${pathname.includes(item.url) &&
+                                        "text-violet-600 hover:text-violet-600"}
+                                    `}
+                                >
                                     {item.icon}
                                 </Link>
                             </Tooltip>

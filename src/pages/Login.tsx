@@ -1,17 +1,18 @@
-import { PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { Button, Divider, Form, Input } from "antd"
+import { unwrapResult, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
+import { Alert, Button, Divider, Form, Input } from "antd"
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, User } from "../redux/userSlice";
 import { UserStore } from "../store/store";
 import { useNavigate } from "react-router";
 import { APILogin } from "../utils/APILogin";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const Login = () => {
 
     const dispatch: ThunkDispatch<User, User, PayloadAction> = useDispatch();
     const navigate = useNavigate();
     const { user } = useSelector((state: UserStore) => state.userStore);
+    const [loginError, setLoginError] = useState<string>("")
 
     const setCsrfCall = async () => {
         await APILogin.get("api/account");
@@ -26,7 +27,14 @@ export const Login = () => {
 
     const handleForm = (formData: User) => {
         console.log(formData);
-        dispatch(loginUser(formData));
+        dispatch(loginUser(formData))
+            .then(unwrapResult)
+            .then((result) => {
+                console.log("Success:", result);
+            })
+            .catch((error) => {
+                setLoginError(error.message as string);
+            });
     }
 
     return (
@@ -44,7 +52,12 @@ export const Login = () => {
                                 </p>
                             </div>
                             <div>
-                                <Form layout="vertical" onFinish={handleForm}>
+                                {
+                                    loginError &&
+                                    <Alert message={loginError} type="error" showIcon className="mb-2" />
+                                }
+
+                                <Form layout="vertical" onFinish={handleForm} onChange={() => setLoginError("")}>
                                     <Form.Item
                                         className="mb-6"
                                         label={<span className="text-sm font-medium text-slate-800">Username</span>}

@@ -18,6 +18,7 @@ export const Chat = () => {
     const numberRoomId = Number(params.roomId);
     const { chatRigthSideOpen } = useSelector((state: GeneralStore) => state.generalStore);
     const { connected, subscribeToRoom, unsubscribeFromRoom } = useContext(WebSocketContext);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const { pagination, setPagination, lastElementRef } = usePagination();
 
@@ -30,7 +31,9 @@ export const Chat = () => {
                     new Map([...prev, ...res.data.content.map((msg: ChatMessage) => [msg.id, msg])])
             );
             setPagination((prev) => ({ ...prev, last: res.data.last }));
-        })
+            setLoading(false);
+        }).catch(() => setLoading(false));
+
     }
 
     useEffect(() => {
@@ -71,23 +74,27 @@ export const Chat = () => {
     return (
         <>
             {
-
-                <div className="flex flex-col flex-grow">
+                <div className="flex flex-col flex-grow" >
                     <ChatHeader />
-                    <div className="overflow-auto p-4 h-[calc(100vh-64px-88px-96px)] flex flex-col-reverse">
-                        {Array.from(messages.values()).map((message, i) => (
-                            <MessageComp
-                                message={message}
-                                lastMessageRef={lastElementRef}
-                                index={i}
-                                messagesSize={messages.size} />
-                        ))}
+                    <div className="overflow-auto p-4 h-[calc(100dvh-64px-88px-96px)] flex flex-col-reverse">
+                        {
+                            loading
+                                ?
+                                <div className="flex items-center justify-center h-full">Loading...</div>
+                                :
+                                Array.from(messages.values()).map((message, i) => (
+                                    <MessageComp
+                                        message={message}
+                                        lastMessageRef={lastElementRef}
+                                        index={i}
+                                        messagesSize={messages.size} />
+                                ))
+                        }
                     </div>
                     <div className="p-4 gap-5 h-24 flex items-center">
                         <SendMessageSection />
                     </div>
                 </div>
-
             }
             {
                 chatRigthSideOpen &&
@@ -95,6 +102,7 @@ export const Chat = () => {
                     <ChatRightSection />
                 </div>
             }
+
         </>
     );
 };

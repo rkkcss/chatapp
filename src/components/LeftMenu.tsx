@@ -62,7 +62,7 @@ export const LeftMenu = () => {
                 isOpen={newChatModalIsOpen}
                 setNewChatRoom={setNewChatRoom}
             />
-            <div className={`h-[calc(100vh-64px)] shadow-lg w-[360px] min-w-[360px] max-w-[360px] ${selectedRoom ? "lg:block hidden" : "block"}`}>
+            <div className={`h-[calc(100dvh-64px)] shadow-lg w-[360px] min-w-[360px] max-w-[360px] ${selectedRoom ? "lg:block hidden" : "block"}`}>
                 <div className="h-full rounded-lg ">
                     <div className="mx-4 pt-4 flex items-center justify-between">
                         <h1 className="text-2xl font-semibold text-">Chats</h1>
@@ -79,7 +79,7 @@ export const LeftMenu = () => {
             </div>
             {
                 !selectedRoom &&
-                <div className="w-full h-[calc(100vh-64px)] pt-10 items-center flex-col gap-4 hidden sm:flex">
+                <div className="w-full h-[calc(100dvh-64px)] pt-10 items-center flex-col gap-4 hidden sm:flex">
                     <TiMessages size={70} className="text-slate-500" />
                     <p className="text-center text-slate-500 font-medium">Select a chat room to start messaging</p>
 

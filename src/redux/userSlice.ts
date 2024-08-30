@@ -41,7 +41,7 @@ export const getAccountInfo = createAsyncThunk<User>(
     }
 );
 
-export const loginUser = createAsyncThunk<User, User>(
+export const loginUser = createAsyncThunk<string, User>(
     'loginUser',
     async (user: User, { dispatch }) => {
         // Az API hívás a felhasználó bejelentkezéséhez
@@ -51,7 +51,7 @@ export const loginUser = createAsyncThunk<User, User>(
         dispatch(getAccountInfo());
 
         // Visszaadja a felhasználói adatokat
-        return user;
+        return "user";
     }
 );
 
@@ -98,7 +98,7 @@ const loginSlice = createSlice({
             .addCase(loginUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
-                state.msg = String(action.error.message);
+                action.error.message = "Username or password incorrect!"
             })
             .addCase(getAccountInfo.pending, (state) => {
                 state.loading = true;

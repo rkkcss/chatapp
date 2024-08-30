@@ -10,7 +10,7 @@ export type User = {
     password?: string;
     firstName?: string;
     lastName?: string;
-    imageUrl: string;
+    imageUrl?: string | "";
     activated?: boolean;
     langKey?: string;
     createdDate?: Date;

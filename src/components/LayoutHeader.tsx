@@ -1,26 +1,50 @@
-import { Dropdown, Tooltip } from "antd"
+import { Badge, Dropdown, Tooltip } from "antd"
 import { Header } from "antd/es/layout/layout"
 import { LuHome, LuMessageSquare } from "react-icons/lu"
 import { Link, useNavigate } from "react-router-dom"
 import type { MenuProps } from "antd"
 import { IoMdNotificationsOutline } from "react-icons/io"
 import { FiUser } from "react-icons/fi"
+import { PiBell, PiBellBold } from "react-icons/pi"
+import { BiBell } from "react-icons/bi"
+import exImg from "../assets/test.jpg"
+import { TbMessage } from "react-icons/tb"
 
 export const LayoutHeader = () => {
     const navigate = useNavigate();
     const menuItems = [
         {
             key: 1,
-            icon: <LuHome size={26} />,
-            label: "Home",
-            url: "/"
-        },
-        {
-            key: 2,
             icon: <LuMessageSquare size={26} />,
             label: "Messages",
             url: "/chat"
         }
+    ]
+
+    const notificationItems: MenuProps['items'] = [
+        {
+            key: '0',
+            label:
+                <div className="flex items-center gap-2">
+                    <div className="relative">
+                        <div className="absolute -bottom-1 -right-1.5">
+                            <TbMessage className="bg-white rounded-full p-0.5" size={24} />
+                        </div>
+                        <img src={exImg} alt="" className="min-w-10 min-h-10 max-w-10 max-h-10 rounded-full" />
+                    </div>
+
+                    <p>Nem is tudom mit kéne mondani</p>
+                </div>,
+            onClick: () => navigate("/profile")
+        },
+        {
+            type: 'divider'
+        },
+        {
+            key: '2',
+            label: "Logout",
+            onClick: () => navigate("/logout")
+        },
     ]
 
     const items: MenuProps['items'] = [
@@ -53,12 +77,19 @@ export const LayoutHeader = () => {
                         </li>
                     ))
                 }
-                <li className="ml-auto mr-0 flex items-center">
-                    <Link to="#" className="w-fit p-2 bg-slate-100 rounded-full">
-                        <IoMdNotificationsOutline size={28} />
-                    </Link>
+                <li className="flex items-center relative">
+                    <Dropdown trigger={["click"]} menu={{ items: notificationItems }}>
+                        <a onClick={(e) => e.preventDefault()} className=" w-fit p-2 bg-slate-100 rounded-full">
+                            <p className="absolute leading-none text-sm flex justify-center items-center -top-2 -right-1 rounded-full bg-red-500 w-5 h-5 text-white">
+                                5
+                            </p>
+                            <BiBell size={28} />
+
+                        </a>
+                    </Dropdown>
+
                 </li>
-                <li className=" flex items-center">
+                <li className="ml-auto mr-0 flex items-center">
                     <Dropdown trigger={["click"]} menu={{ items }}>
                         <a onClick={(e) => e.preventDefault()} className=" w-fit p-2 bg-slate-100 rounded-full">
                             <FiUser size={28} />

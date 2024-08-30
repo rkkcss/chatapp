@@ -6,8 +6,10 @@ import { LuPenSquare } from "react-icons/lu";
 import { Button } from "antd";
 import { NewChatModal } from "./modals/NewChatModal";
 import { WebSocketStore } from "../store/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { WebSocketContext } from "../contexts/WebSocketProvider";
+import { setRoom } from "../redux/webSocketSlice";
+import { TiMessages } from "react-icons/ti";
 
 export const LeftMenu = () => {
     const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
@@ -15,12 +17,16 @@ export const LeftMenu = () => {
     const [newChatModalIsOpen, setNewChatModalIsOpen] = useState<boolean>(false);
     const { selectedRoom } = useSelector((state: WebSocketStore) => state.webSocketStore);
     const { messageNotification } = useContext(WebSocketContext);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         API.get("/api/chat-rooms").then((res) => {
             console.log(res);
             setChatRooms(res.data);
         })
+        return () => {
+            dispatch(setRoom(null));
+        }
     }, [])
 
     useEffect(() => {
@@ -30,7 +36,9 @@ export const LeftMenu = () => {
             if (targetRoomIndex !== -1) {
                 const targetRoom = updatedChatRooms[targetRoomIndex];
                 updatedChatRooms.splice(targetRoomIndex, 1);
+
                 updatedChatRooms.unshift({ ...targetRoom, lastMessage: messageNotification });
+                console.log("MSWE", updatedChatRooms);
                 setChatRooms(updatedChatRooms);
             }
         }
@@ -50,7 +58,7 @@ export const LeftMenu = () => {
                 isOpen={newChatModalIsOpen}
                 setNewChatRoom={setNewChatRoom}
             />
-            <div className={`h-[calc(100vh-64px)] shadow-lg w-[360px] min-w-[360px] max-w-[360px] ${selectedRoom ? "md:block hidden" : "block"}`}>
+            <div className={`h-[calc(100vh-64px)] shadow-lg w-[360px] min-w-[360px] max-w-[360px] ${selectedRoom ? "lg:block hidden" : "block"}`}>
                 <div className="h-full rounded-lg ">
                     <div className="mx-4 pt-4 flex items-center justify-between">
                         <h1 className="text-2xl font-semibold text-">Chats</h1>
@@ -65,6 +73,14 @@ export const LeftMenu = () => {
                     </ul>
                 </div>
             </div>
+            {
+                !selectedRoom &&
+                <div className="w-full h-[calc(100vh-64px)] pt-10 items-center flex-col gap-4 hidden sm:flex">
+                    <TiMessages size={70} className="text-slate-500" />
+                    <p className="text-center text-slate-500 font-medium">Select a chat room to start messaging</p>
+
+                </div>
+            }
         </>
     )
 }

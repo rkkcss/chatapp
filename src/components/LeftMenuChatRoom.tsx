@@ -2,11 +2,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ChatRoom } from '../types/globalTypes'
 import moment from 'moment'
 import useRoomName from '../hooks/useRoomName'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setRoom } from '../redux/webSocketSlice'
 import { ChatRoomImage } from './ChatRoomImage'
 import { useContext, useEffect, useState } from 'react'
 import { WebSocketContext } from '../contexts/WebSocketProvider'
+import { WebSocketStore } from '../store/store'
 
 type LeftMenuChatRoomProps = {
     room: ChatRoom
@@ -16,16 +17,9 @@ export const LeftMenuChatRoom = ({ room }: LeftMenuChatRoomProps) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [lastMessage, setLastMessage] = useState(room.lastMessage)
+    const { selectedRoom } = useSelector((state: WebSocketStore) => state.webSocketStore);
 
-    // const createdAt = room.lastMessage?.createdAt ? moment(room.lastMessage?.createdAt).fromNow() : "";
     const roomName = useRoomName({ participants: room.participants });
-    const { messageNotification } = useContext(WebSocketContext);
-
-    useEffect(() => {
-        if (room.id === messageNotification.chatRoom?.id) {
-            setLastMessage(messageNotification);
-        }
-    }, [messageNotification])
 
     const roomOnClickHandler = () => {
         dispatch(setRoom(room))
@@ -34,7 +28,13 @@ export const LeftMenuChatRoom = ({ room }: LeftMenuChatRoomProps) => {
 
     return (
         <li className="group" key={room.id} onClick={roomOnClickHandler}>
-            <Link to="#" className="flex items-center p-4 gap-2 hover:bg-slate-100 rounded-md">
+            <Link to="#" className={`flex items-center p-4 gap-2 rounded-md 
+            ${selectedRoom?.id == room.id ?
+                    'bg-gray-400/30' :
+                    'hover:bg-slate-100'
+                }`
+            }
+            >
                 {/* <img src={img} alt="img" className="w-10 h-10 rounded-md" /> */}
                 <div>
                     <ChatRoomImage participants={room.participants} />

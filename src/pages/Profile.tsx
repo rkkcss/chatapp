@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux"
-import img from "../assets/test.jpg"
 import { UserStore } from "../store/store"
-import { Button, Image, Tabs, TabsProps } from "antd";
+import { Button, Tabs, TabsProps } from "antd";
 import { BsFillImageFill } from "react-icons/bs";
 import { EditProfile } from "../components/EditProfile";
 import { useState } from "react";
@@ -23,10 +22,10 @@ export const Profile = () => {
     return (
         <>
             <UploadImageModal open={uploadImageModal} onClose={() => setUploadImageModal(false)} imageURL={user?.imageUrl} />
-            <div className="flex justify-center items-center my-2">
+            <div className="flex justify-center items-center my-2 h-full">
                 <div className=" flex flex-col justify-center items-center">
                     <h1 className="text-2xl text-slate-800">Profile Page</h1>
-                    <div className="w-[30rem] shadow-lg rounded-lg p-5">
+                    <div className="w-[50rem] shadow-lg rounded-lg p-5">
 
                         {/* User Profile Here */}
                         <div className="flex flex-col items-center">

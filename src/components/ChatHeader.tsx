@@ -22,7 +22,7 @@ export const ChatHeader = () => {
 
     return (
         <div className="flex items-center backdrop-filter backdrop-blur-lg bg-white/40 p-4 shadow-sm">
-            <Tooltip title="Vissza" placement="bottom" className={`block md:hidden`}>
+            <Tooltip title="Vissza" placement="bottom" className={`block lg:hidden`}>
                 <Button icon={<FaAngleLeft size={28} className="text-slate-800" />} className="mr-3" type="text" onClick={handleBackToChat} />
             </Tooltip>
             <ChatRoomImage participants={selectedRoom?.participants} />

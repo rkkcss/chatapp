@@ -108,7 +108,6 @@ export const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
             console.log(`Unsubscribed from room: ${subscription.current?.id}`);
             subscription.current = null;
         }
-        // dispatch(setRoom({}))
     }, [subscription]);
 
     const sendMessage = useCallback((roomId: number, message: ChatMessage) => {

@@ -2,7 +2,7 @@ import { useParams } from "react-router";
 import { useContext, useEffect, useState, useCallback } from "react";
 import { API } from "../utils/API";
 import { ChatMessage } from "../types/globalTypes";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { GeneralStore, WebSocketStore } from "../store/store";
 import { ChatHeader } from "./ChatHeader";
 import { Message } from "webstomp-client";
@@ -11,10 +11,12 @@ import { WebSocketContext } from "../contexts/WebSocketProvider";
 import { SendMessageSection } from "./SendMessageSection";
 import usePagination from "../hooks/usePagination";
 import MessageComp from "./MessageComp";
+import { setRoom } from "../redux/webSocketSlice";
 
 export const Chat = () => {
     const [messages, setMessages] = useState<Map<string, ChatMessage>>(new Map());
     const params = useParams();
+    const dispatch = useDispatch();
     const numberRoomId = Number(params.roomId);
     const { chatRigthSideOpen } = useSelector((state: GeneralStore) => state.generalStore);
     const { connected, subscribeToRoom, unsubscribeFromRoom } = useContext(WebSocketContext);
@@ -64,7 +66,6 @@ export const Chat = () => {
             subscribeToRoom(numberRoomId, getMessageHandler);
         }
 
-        // Cleanup function to unsubscribe when the component unmounts or roomId changes
         return () => {
             unsubscribeFromRoom(numberRoomId);
         };
@@ -73,26 +74,23 @@ export const Chat = () => {
     return (
         <>
             {
-                selectedRoom ?
-                    <div className="flex flex-col flex-grow">
-                        <ChatHeader />
-                        <div className="overflow-auto p-4 h-full max-h-[calc(100vh-64px-88px-96px)] flex flex-col-reverse">
-                            {Array.from(messages.values()).map((message, i) => (
-                                <MessageComp
-                                    message={message}
-                                    lastMessageRef={lastElementRef}
-                                    index={i}
-                                    messagesSize={messages.size} />
-                            ))}
-                        </div>
-                        <div className="p-4 gap-5 h-24 flex items-center">
-                            <SendMessageSection />
-                        </div>
+
+                <div className="flex flex-col flex-grow">
+                    <ChatHeader />
+                    <div className="overflow-auto p-4 h-[calc(100vh-64px-88px-96px)] flex flex-col-reverse">
+                        {Array.from(messages.values()).map((message, i) => (
+                            <MessageComp
+                                message={message}
+                                lastMessageRef={lastElementRef}
+                                index={i}
+                                messagesSize={messages.size} />
+                        ))}
                     </div>
-                    :
-                    <div>
-                        No room selected
+                    <div className="p-4 gap-5 h-24 flex items-center">
+                        <SendMessageSection />
                     </div>
+                </div>
+
             }
             {
                 chatRigthSideOpen &&

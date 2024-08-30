@@ -1,5 +1,5 @@
 import { Alert, Divider, Modal, notification, Select } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ChatRoom } from '../../types/globalTypes'
 import { API } from '../../utils/API'
 import { User } from '../../redux/userSlice'

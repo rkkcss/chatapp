@@ -5,8 +5,7 @@ import useRoomName from '../hooks/useRoomName'
 import { useDispatch, useSelector } from 'react-redux'
 import { setRoom } from '../redux/webSocketSlice'
 import { ChatRoomImage } from './ChatRoomImage'
-import { useContext, useEffect, useState } from 'react'
-import { WebSocketContext } from '../contexts/WebSocketProvider'
+import { useEffect, useState } from 'react'
 import { WebSocketStore } from '../store/store'
 
 type LeftMenuChatRoomProps = {
@@ -26,6 +25,10 @@ export const LeftMenuChatRoom = ({ room }: LeftMenuChatRoomProps) => {
         navigate(`/chat/${room.id}`)
     }
 
+    useEffect(() => {
+        setLastMessage(room.lastMessage);
+    }, [room])
+
     return (
         <li className="group" key={room.id} onClick={roomOnClickHandler}>
             <Link to="#" className={`flex items-center p-4 gap-2 rounded-md 
@@ -37,7 +40,7 @@ export const LeftMenuChatRoom = ({ room }: LeftMenuChatRoomProps) => {
             >
                 {/* <img src={img} alt="img" className="w-10 h-10 rounded-md" /> */}
                 <div>
-                    <ChatRoomImage participants={room.participants} />
+                    <ChatRoomImage participants={room.participants || []} />
                 </div>
                 <div className="w-full">
                     <p className="text-slate-800 font-semibold text-sm">{roomName}</p>

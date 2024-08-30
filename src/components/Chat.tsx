@@ -2,8 +2,8 @@ import { useParams } from "react-router";
 import { useContext, useEffect, useState, useCallback } from "react";
 import { API } from "../utils/API";
 import { ChatMessage } from "../types/globalTypes";
-import { useDispatch, useSelector } from "react-redux";
-import { GeneralStore, WebSocketStore } from "../store/store";
+import { useSelector } from "react-redux";
+import { GeneralStore, } from "../store/store";
 import { ChatHeader } from "./ChatHeader";
 import { Message } from "webstomp-client";
 import { ChatRightSection } from "./ChatRightSection";
@@ -11,16 +11,13 @@ import { WebSocketContext } from "../contexts/WebSocketProvider";
 import { SendMessageSection } from "./SendMessageSection";
 import usePagination from "../hooks/usePagination";
 import MessageComp from "./MessageComp";
-import { setRoom } from "../redux/webSocketSlice";
 
 export const Chat = () => {
     const [messages, setMessages] = useState<Map<string, ChatMessage>>(new Map());
     const params = useParams();
-    const dispatch = useDispatch();
     const numberRoomId = Number(params.roomId);
     const { chatRigthSideOpen } = useSelector((state: GeneralStore) => state.generalStore);
     const { connected, subscribeToRoom, unsubscribeFromRoom } = useContext(WebSocketContext);
-    const { selectedRoom } = useSelector((state: WebSocketStore) => state.webSocketStore);
 
     const { pagination, setPagination, lastElementRef } = usePagination();
 

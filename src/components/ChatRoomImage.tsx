@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
 import { UserStore } from '../store/store';
 import { User } from '../redux/userSlice';
-import { notification } from 'antd';
+import { PublicUser } from '../types/globalTypes';
 
 type ChatRoomImageProps = {
-    participants: User[],
+    participants: PublicUser[],
 }
 
 export const ChatRoomImage = ({ participants }: ChatRoomImageProps) => {
@@ -21,8 +21,6 @@ export const ChatRoomImage = ({ participants }: ChatRoomImageProps) => {
         const firstNameB = b.firstName || '';
         return firstNameA.localeCompare(firstNameB);
     });
-
-
 
     return (
         <>

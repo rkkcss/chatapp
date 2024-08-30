@@ -1,6 +1,4 @@
 import { Form, Input } from "antd"
-import { useSelector } from "react-redux";
-import { UserStore } from "../store/store";
 import { User } from "../redux/userSlice";
 import { useState } from "react";
 
@@ -11,7 +9,7 @@ type EditProfileProps = {
 export const EditProfile = ({ userProps }: EditProfileProps) => {
     const [user, setUser] = useState<User | null>(userProps);
 
-    const handleFields = (e) => {
+    const handleFields = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.log(e.target.value);
         setUser({ ...user, [e.target.name]: e.target.value });
     }

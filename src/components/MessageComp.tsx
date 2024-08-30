@@ -1,6 +1,5 @@
 import { Image, Tooltip } from 'antd'
 import moment from 'moment'
-import React from 'react'
 import { UserStore } from '../store/store'
 import { useSelector } from 'react-redux'
 import { ChatMessage } from '../types/globalTypes'

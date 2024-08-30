@@ -10,7 +10,7 @@ import { setImageUrl } from '../../redux/userSlice';
 type UploadImageModalProps = {
     open: boolean,
     onClose: () => void,
-    imageURL: string | ""
+    imageURL: string
 }
 
 export const UploadImageModal = ({ open, onClose, imageURL }: UploadImageModalProps) => {

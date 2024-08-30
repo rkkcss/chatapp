@@ -1,5 +1,5 @@
 import { Button, Input, notification, Popover, Upload } from 'antd'
-import React, { useContext, useRef, useState } from 'react'
+import { useContext, useState } from 'react'
 import { CiImageOn } from 'react-icons/ci'
 import { FaRegEdit } from 'react-icons/fa'
 import { LuSendHorizonal } from 'react-icons/lu'
@@ -9,7 +9,6 @@ import { APIImage } from '../utils/APIImage'
 import { WebSocketContext } from '../contexts/WebSocketProvider'
 import { useParams } from 'react-router'
 import { UploadRequestOption } from 'rc-upload/lib/interface';
-import { usePagination } from '../hooks/usePagination'
 
 export const SendMessageSection = () => {
 

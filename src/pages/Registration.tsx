@@ -1,11 +1,12 @@
 import { Button, Divider, Form, Input } from "antd"
 import { useNavigate } from "react-router"
 import { API } from "../utils/API";
+import { User } from "../redux/userSlice";
 
 export const Registration = () => {
     const navigate = useNavigate();
 
-    const handleForm = (data) => {
+    const handleForm = (data: User) => {
         API.post("/api/register", data).then((res) => {
             console.log("res", res);
         });

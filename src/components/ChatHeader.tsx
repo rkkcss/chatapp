@@ -25,7 +25,7 @@ export const ChatHeader = () => {
             <Tooltip title="Vissza" placement="bottom" className={`block lg:hidden`}>
                 <Button icon={<FaAngleLeft size={28} className="text-slate-800" />} className="mr-3" type="text" onClick={handleBackToChat} />
             </Tooltip>
-            <ChatRoomImage participants={selectedRoom?.participants} />
+            <ChatRoomImage participants={selectedRoom?.participants || []} />
             {/* <img src={img} alt="img" className="w-14 h-14 rounded-md" /> */}
             <div className="ml-3">
                 <p className="font-bold text-slate-800">{roomName}</p>

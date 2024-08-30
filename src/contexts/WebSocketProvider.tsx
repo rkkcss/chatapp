@@ -2,10 +2,11 @@ import { createContext, useCallback, useEffect, useState, ReactNode, useRef } fr
 import SockJS from 'sockjs-client';
 import { over, Client, Message, Subscription } from 'webstomp-client';
 import { useDispatch, useSelector } from 'react-redux';
-import { setRoom, setUsers } from '../redux/webSocketSlice';
+import { setUsers } from '../redux/webSocketSlice';
 import { ChatMessage } from '../types/globalTypes';
 import { UserStore } from '../store/store';
-import { getAccountInfo } from '../redux/userSlice';
+import { getAccountInfo, User } from '../redux/userSlice';
+import { PayloadAction, ThunkDispatch } from '@reduxjs/toolkit';
 
 interface WebSocketContextType {
     sendMessage: (roomId: number, message: ChatMessage) => void;
@@ -36,7 +37,7 @@ export const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
     const client = useRef<Client | null>(null);
 
     const { user } = useSelector((state: UserStore) => state.userStore);
-    const dispatch = useDispatch();
+    const dispatch: ThunkDispatch<User, User, PayloadAction> = useDispatch();
 
     const connect = useCallback(() => {
         if (connected) return;

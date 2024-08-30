@@ -21,7 +21,7 @@ export const Profile = () => {
 
     return (
         <>
-            <UploadImageModal open={uploadImageModal} onClose={() => setUploadImageModal(false)} imageURL={user?.imageUrl} />
+            <UploadImageModal open={uploadImageModal} onClose={() => setUploadImageModal(false)} imageURL={user?.imageUrl || ""} />
             <div className="flex justify-center items-center my-2 h-full">
                 <div className=" flex flex-col justify-center items-center">
                     <h1 className="text-2xl text-slate-800">Profile Page</h1>

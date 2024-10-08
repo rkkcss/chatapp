@@ -15,6 +15,15 @@ export const LayoutHeader = () => {
     const { pathname } = useLocation();
     const { user } = useSelector((user: UserStore) => user.userStore);
 
+    const adminItems = [
+        {
+            key: 2,
+            icon: <RiAdminLine size={26} />,
+            label: "Admin",
+            url: "/admin",
+        }
+    ]
+
     const menuItems = [
         {
             key: 1,
@@ -22,12 +31,6 @@ export const LayoutHeader = () => {
             label: "Messages",
             url: "/chat"
         },
-        {
-            key: 2,
-            icon: <RiAdminLine size={26} />,
-            label: "Admin",
-            url: "/admin"
-        }
     ]
 
     const notificationItems: MenuProps['items'] = [
@@ -90,6 +93,25 @@ export const LayoutHeader = () => {
                             </Tooltip>
                         </li>
                     ))
+                }
+
+                {
+                    user?.authorities?.includes("ROLE_ADMIN") && (
+                        adminItems.map((item) =>
+                            <li key={item.key} className="flex items-center">
+                                <Tooltip placement="bottom" title={item.label}>
+                                    <Link reloadDocument={false} to={item.url}
+                                        className={`p-2 w-fit bg-slate-200 rounded-full 
+                                ${pathname.includes(item.url) &&
+                                            "text-violet-600 hover:text-violet-600"}
+                                `}
+                                    >
+                                        {item.icon}
+                                    </Link>
+                                </Tooltip>
+                            </li>
+                        )
+                    )
                 }
                 <li className="flex items-center relative">
                     <Dropdown trigger={["click"]} menu={{ items: notificationItems }}>

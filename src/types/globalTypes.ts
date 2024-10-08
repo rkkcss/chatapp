@@ -23,8 +23,8 @@ export type ChatRoom = {
 }
 
 export type DefaultAvatarImage = {
-    id: number,
-    url: string,
-    name: string,
-    createdDate: string
+    id?: number,
+    url?: string,
+    name?: string,
+    createdDate?: string
 }

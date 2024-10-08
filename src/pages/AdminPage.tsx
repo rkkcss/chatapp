@@ -11,7 +11,9 @@ import { useNavigate } from 'react-router'
 export const AdminPage = () => {
     const [defaultImages, setDefaultImages] = useState<DefaultAvatarImage[]>([]);
     const [addImageModal, setAddImageModal] = useState(false);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+    const [selectedImages, setSelectedImages] = useState<DefaultAvatarImage[]>([]);
 
     useEffect(() => {
         API.get("/api/avatar-images").then(res => {
@@ -27,6 +29,28 @@ export const AdminPage = () => {
     const uploadedImageHandler = (uploadedImage: string) => {
         API.post("/api/avatar-images", { imageUrl: uploadedImage }).then(res => {
             setDefaultImages([...defaultImages, res.data])
+        })
+    }
+
+    const addToSelecedList = (image: DefaultAvatarImage) => {
+        setSelectedImages((prev) => {
+            const item = prev.indexOf(image);
+            if (item === -1) {
+                return [...prev, image];
+            } else {
+                return prev.filter(existingItem => existingItem.id !== image.id);
+            }
+        });
+    }
+
+    const deleteSelectedItems = () => {
+        console.log(selectedImages);
+        API.post("/api/avatar-images/delete", selectedImages).then(res => {
+            notification.success({ message: 'Deleted successfully.', placement: 'bottom' });
+            setDefaultImages(prev => {
+                return prev.filter(item => !selectedImages.includes(item));
+            })
+            setSelectedImages([]);
         })
     }
 
@@ -64,20 +88,32 @@ export const AdminPage = () => {
 
                         <ul className="grid grid-cols-4 gap-y-6">
                             {defaultImages.map(img => (
-                                <li key={img.id} className="text-center flex flex-col items-center w-full">
-                                    <div className="outline-violet-600 outline outline-2 rounded-full relative">
+                                <li key={img.id} className="text-center flex flex-col items-center w-full cursor-pointer" onClick={() => addToSelecedList(img)}>
+                                    <div className={`${selectedImages.indexOf(img) !== -1 && 'outline-violet-600 outline outline-2'}  
+                                        hover:outline-violet-600 
+                                        hover:outline hover:outline-2 
+                                        rounded-full 
+                                        relative`}
+                                    >
                                         <img src={img.url}
                                             alt={img.name}
                                             className="h-[80px] w-[80px] object-cover rounded-full "
                                         />
-                                        <IoIosCheckmarkCircle size={24} className=" text-violet-600 absolute top-0 -right-1 bg-white rounded-full" />
+                                        {selectedImages.indexOf(img) !== -1 &&
+                                            <IoIosCheckmarkCircle size={24} className=" text-violet-600 absolute top-0 -right-1 bg-white rounded-full" />
+                                        }
                                     </div>
                                     <p className="font-medium text-slate-700">{img.name}</p>
                                 </li>
                             ))}
                         </ul>
 
-                        <div className="mt-8 text-end">
+                        <div className="mt-8 flex justify-end gap-2">
+                            {
+                                selectedImages.length > 0 &&
+                                <Button type="default" onClick={deleteSelectedItems}>Delete items</Button>
+                            }
+
                             <Button type="primary" onClick={() => setAddImageModal(true)}>Add New Avatar Image</Button>
                         </div>
                     </div>

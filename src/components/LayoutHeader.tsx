@@ -3,14 +3,17 @@ import { Header } from "antd/es/layout/layout"
 import { LuMessageSquare } from "react-icons/lu"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import type { MenuProps } from "antd"
-import { FiUser } from "react-icons/fi"
 import { BiBell } from "react-icons/bi"
 import exImg from "../assets/test.jpg"
 import { TbMessage } from "react-icons/tb"
+import { RiAdminLine } from "react-icons/ri"
+import { UserStore } from "../store/store"
+import { useSelector } from "react-redux"
 
 export const LayoutHeader = () => {
     const navigate = useNavigate();
     const { pathname } = useLocation();
+    const { user } = useSelector((user: UserStore) => user.userStore);
 
     const menuItems = [
         {
@@ -18,6 +21,12 @@ export const LayoutHeader = () => {
             icon: <LuMessageSquare size={26} />,
             label: "Messages",
             url: "/chat"
+        },
+        {
+            key: 2,
+            icon: <RiAdminLine size={26} />,
+            label: "Admin",
+            url: "/admin"
         }
     ]
 
@@ -35,7 +44,7 @@ export const LayoutHeader = () => {
 
                     <p>Nem is tudom mit kéne mondani</p>
                 </div>,
-            onClick: () => navigate("/profile")
+            onClick: () => navigate(`/profile/${user?.login}`)
         },
         {
             type: 'divider'
@@ -51,7 +60,7 @@ export const LayoutHeader = () => {
         {
             key: '0',
             label: "Profile",
-            onClick: () => navigate("/profile")
+            onClick: () => navigate(`/profile/${user?.login}`)
         },
         {
             type: 'divider'
@@ -96,8 +105,8 @@ export const LayoutHeader = () => {
                 </li>
                 <li className="ml-auto mr-0 flex items-center">
                     <Dropdown trigger={["click"]} menu={{ items }}>
-                        <a onClick={(e) => e.preventDefault()} className=" w-fit p-2 bg-slate-100 rounded-full">
-                            <FiUser size={28} />
+                        <a onClick={(e) => e.preventDefault()} className=" w-fit rounded-full">
+                            <img src={user?.imageUrl} className="rounded-full w-[42px] h-[42px]" alt="" />
                         </a>
                     </Dropdown>
                 </li>

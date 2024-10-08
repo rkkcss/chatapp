@@ -14,12 +14,18 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         theme={{
           token: {
             colorPrimary: '#9333ea',
-            colorPrimaryHover: '#7e22ce'
+            colorPrimaryHover: '#7e22ce',
           },
           components: {
-            Button: {
-              borderRadius: 8
-            },
+            // Button: {
+            //   borderRadius: 8,
+            //   defaultColor: '#9333ea',
+            //   defaultBorderColor: '#9333ea'
+            // },
+            Segmented: {
+              itemSelectedBg: '#9333ea',
+              itemSelectedColor: 'white',
+            }
           }
         }}
       >

@@ -33,7 +33,7 @@ export const ChatHeader = () => {
             </div>
 
             <div className="mr-0 ml-auto">
-                <Button type="default" icon={<FaInfo className="text-slate-800" />} onClick={() => dispatch(toggleChatRightSide(!chatRigthSideOpen))}></Button>
+                <Button type="default" icon={<FaInfo />} onClick={() => dispatch(toggleChatRightSide(!chatRigthSideOpen))}></Button>
             </div>
         </div>
     )

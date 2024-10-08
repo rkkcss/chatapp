@@ -9,6 +9,7 @@ import { Chat } from './components/Chat'
 import { WebSocketProvider } from './contexts/WebSocketProvider'
 import { Registration } from './pages/Registration'
 import { Profile } from './pages/Profile'
+import { AdminPage } from './pages/AdminPage'
 
 function App() {
   return (
@@ -29,7 +30,8 @@ function App() {
           <Route path="/chat" element={<ChatLayout />}>
             <Route path=":roomId" element={<Chat />} />
           </Route>
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/:login" element={<Profile />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Route>
       </Route>
     </Routes>

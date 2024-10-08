@@ -6,6 +6,8 @@ import { User } from '../../redux/userSlice'
 import img from "../../assets/test.jpg"
 import { IoIosWarning } from 'react-icons/io'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { UserStore } from '../../store/store'
 
 type NewChatProps = {
     isOpen: boolean,
@@ -16,6 +18,7 @@ type NewChatProps = {
 export const NewChatModal = ({ isOpen, onClose, setNewChatRoom }: NewChatProps) => {
     const [findUsers, setFindUsers] = useState<User[]>([]);
     const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
+    const { user } = useSelector((state: UserStore) => state.userStore);
 
     const [roomAlreadyExists, setRoomAlreadyExists] = useState<ChatRoom | null>(null)
 
@@ -25,7 +28,7 @@ export const NewChatModal = ({ isOpen, onClose, setNewChatRoom }: NewChatProps) 
         setTimeout(() => {
             API.get(`/api/find-users?query=${value}`).then(res => {
                 console.log(res.data);
-                setFindUsers(res.data);
+                setFindUsers(res.data.filter((el: User) => el.id !== user?.id));
             })
         }, 1000);
     }

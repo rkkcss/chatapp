@@ -10,7 +10,6 @@ export const EditProfile = ({ userProps }: EditProfileProps) => {
     const [user, setUser] = useState<User | null>(userProps);
 
     const handleFields = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
         setUser({ ...user, [e.target.name]: e.target.value });
     }
 

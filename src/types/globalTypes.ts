@@ -21,3 +21,10 @@ export type ChatRoom = {
     lastMessage?: ChatMessage
     participants?: PublicUser[]
 }
+
+export type DefaultAvatarImage = {
+    id: number,
+    url: string,
+    name: string,
+    createdDate: string
+}

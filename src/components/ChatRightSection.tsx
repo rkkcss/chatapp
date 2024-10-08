@@ -1,11 +1,22 @@
 import { useSelector } from "react-redux";
 import { WebSocketStore } from "../store/store";
-import { Collapse, CollapseProps } from "antd";
+import { Collapse, CollapseProps, Image } from "antd";
+import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { API } from "../utils/API";
 
 export const ChatRightSection = () => {
     const { selectedRoom } = useSelector((state: WebSocketStore) => state.webSocketStore);
-    // const roomName = useRoomName({ participants: selectedRoom?.participants })
-    // const { connected } = useWebSocket();
+    const navigate = useNavigate();
+    const [mediaFiles, setMediaFiles] = useState<string[]>([])
+
+    useEffect(() => {
+        API.get(`/api/messages/get-all-media/${selectedRoom?.id}`).then((res) => {
+            setMediaFiles(res.data);
+            console.log(res.data);
+        })
+    }, [selectedRoom]);
+
     const items: CollapseProps['items'] = [
         {
             key: '1',
@@ -13,7 +24,10 @@ export const ChatRightSection = () => {
             children:
                 <ul>
                     {selectedRoom?.participants?.map(participant => (
-                        <li key={participant.id} className="mb-2 hover:bg-gray-200/70 cursor-pointer p-2 rounded-xl">
+                        <li key={participant.id}
+                            className="mb-2 hover:bg-gray-200/70 cursor-pointer p-2 rounded-xl"
+                            onClick={() => navigate(`/profile/${participant.login}`)}
+                        >
                             <div className="flex gap-2 items-center">
                                 <div>
                                     <img src={participant.imageUrl} alt="user" className="rounded-lg min-h-9 min-w-9 h-9 w-9 object-cover" />
@@ -29,8 +43,15 @@ export const ChatRightSection = () => {
         },
         {
             key: '2',
-            label: 'This is panel header 2',
-            children: <p>Created: 2022.12.01.</p>,
+            label: 'Media files',
+            children:
+                <div>
+                    <div className="grid grid-cols-3 gap-0.5">
+                        {mediaFiles.map((file) => (
+                            <Image src={file} alt="media" width={110} height={110} className="" />
+                        ))}
+                    </div>
+                </div>,
         },
         {
             key: '3',

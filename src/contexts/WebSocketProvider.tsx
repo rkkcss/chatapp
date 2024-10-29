@@ -8,6 +8,8 @@ import { UserStore } from '../store/store';
 import { getAccountInfo, User } from '../redux/userSlice';
 import { PayloadAction, ThunkDispatch } from '@reduxjs/toolkit';
 
+const serverMode = import.meta.env.VITE_API_URL;
+
 interface WebSocketContextType {
     sendMessage: (roomId: number, message: ChatMessage) => void;
     connected: boolean;
@@ -42,7 +44,7 @@ export const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
     const connect = useCallback(() => {
         if (connected) return;
 
-        const socket = new SockJS("http://192.168.0.69:8080/ws/connect");
+        const socket = new SockJS(`${serverMode}ws/connect`);
         const stompClient = over(socket);
 
         stompClient.connect({ "accept-version": "1.1,1.2" }, frame => {

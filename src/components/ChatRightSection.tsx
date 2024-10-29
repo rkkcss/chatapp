@@ -48,7 +48,7 @@ export const ChatRightSection = () => {
                 <div>
                     <div className="grid grid-cols-3 gap-0.5">
                         {mediaFiles.map((file) => (
-                            <Image src={file} alt="media" width={110} height={110} className="" />
+                            <Image key={file} src={file} alt="media" width={110} height={110} className="" />
                         ))}
                     </div>
                 </div>,

@@ -88,7 +88,7 @@ export const NewChatModal = ({ isOpen, onClose, setNewChatRoom }: NewChatProps) 
                 options={findUsers}
                 value={selectedUsers}
                 placeholder="Message to..."
-                fieldNames={{ label: "firstName", value: "id" }}
+                fieldNames={{ label: "login", value: "id" }}
             />
             {
                 roomAlreadyExists &&

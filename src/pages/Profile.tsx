@@ -1,14 +1,12 @@
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, UserStore } from "../store/store"
 import { Button, notification, Tabs, TabsProps } from "antd";
-import { BsFillImageFill } from "react-icons/bs";
 import { EditProfile } from "../components/EditProfile";
 import { useEffect, useState } from "react";
 import { API } from "../utils/API";
 import { UploadImageModal } from "../components/modals/UploadImageModal";
-import { useLocation, useParams } from "react-router";
-import { setImageUrl, updateUserImg, User } from "../redux/userSlice";
-import { CiImageOn } from "react-icons/ci";
+import { useParams } from "react-router";
+import { updateUserImg } from "../redux/userSlice";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineImage } from "react-icons/md";
 import { UserProfile } from "../components/UserProfile";
@@ -66,8 +64,8 @@ export const Profile = () => {
                                             <img src={user?.imageUrl} alt="User Profile" className="w-44 h-44 rounded-full object-cover mb-2" />
                                         </div>
                                         <div className="flex flex-col gap-4">
-                                            <Button type="default" className="font-semibold" icon={<MdOutlineImage size={20} />} onClick={() => setUploadImageModal(true)}>Change</Button>
-                                            <Button type="default" className="font-semibold" icon={<RiDeleteBin6Line size={20} />} >Remove</Button>
+                                            <Button type="default" className="font-semibold text-slate-600" icon={<MdOutlineImage size={20} />} onClick={() => setUploadImageModal(true)}>Change</Button>
+                                            <Button type="default" className="font-semibold text-slate-600" icon={<RiDeleteBin6Line size={20} />} >Remove</Button>
                                         </div>
                                     </div>
 

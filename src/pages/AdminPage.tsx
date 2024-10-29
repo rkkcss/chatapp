@@ -18,7 +18,7 @@ export const AdminPage = () => {
     useEffect(() => {
         API.get("/api/avatar-images").then(res => {
             setDefaultImages(res.data)
-        }).then(res => {
+        }).then(() => {
 
         }).catch(err => {
             notification.error({ message: err.response.data.detail, placement: "bottom" });
@@ -45,7 +45,7 @@ export const AdminPage = () => {
 
     const deleteSelectedItems = () => {
         console.log(selectedImages);
-        API.post("/api/avatar-images/delete", selectedImages).then(res => {
+        API.post("/api/avatar-images/delete", selectedImages).then(() => {
             notification.success({ message: 'Deleted successfully.', placement: 'bottom' });
             setDefaultImages(prev => {
                 return prev.filter(item => !selectedImages.includes(item));
@@ -64,26 +64,8 @@ export const AdminPage = () => {
             <div className="h-[calc(100dvh-64px)] w-screen flex justify-center items-start pt-7">
                 <div className="bg-neutral-100 min-w-[375px] w-[600px] shadow-lg p-8">
                     <h1 className="text-center text-2xl font-medium text-slate-800">
-                        Admin Page
+                        Upload or delete avatar images
                     </h1>
-
-                    <Segmented
-                        options={[{
-                            label:
-                                <div className='flex items-center gap-2 py-1'>
-                                    <GrEmoji size={20} />
-                                    <span>Memoji</span>
-                                </div>, value: "memoji"
-                        },
-                        {
-                            label:
-                                <div className='flex items-center gap-2 py-1'>
-                                    <MdEmojiEmotions size={20} />
-                                    <span>Images</span>
-                                </div>, value: "images"
-                        }
-                        ]}
-                    />
                     <div className="pt-8">
 
                         <ul className="grid grid-cols-4 gap-y-6">

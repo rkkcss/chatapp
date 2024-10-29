@@ -1,4 +1,3 @@
-import React from 'react'
 import { PublicUser } from '../types/globalTypes'
 import { Button, Divider } from 'antd'
 import { FaFacebookSquare, FaInstagram } from 'react-icons/fa'

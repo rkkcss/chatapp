@@ -14,7 +14,7 @@ export const MemojiSelector = () => {
     const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
-        API.get("/api/avatar-images").then(res => {
+        API.get("/api/avatar-images/public").then(res => {
             setAvatarImages(res.data);
         });
     }, [])

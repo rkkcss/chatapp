@@ -84,6 +84,7 @@ export const Chat = () => {
                                 :
                                 Array.from(messages.values()).map((message, i) => (
                                     <MessageComp
+                                        key={message.id}
                                         message={message}
                                         lastMessageRef={lastElementRef}
                                         index={i}

@@ -29,9 +29,10 @@ const MessageComp = ({ message, lastMessageRef, index, messagesSize }: MessagePr
                     }
                     {
                         message.text &&
-
-                        <div className={`border ${message.user?.id === user?.id ? "border-neutral-300 text-slate-800" : "bg-violet-600 border-violet-600 text-neutral-50"} w-full p-2 rounded-xl`}>
-                            <p>{message.text}</p>
+                        <div className="w-full flex justify-end">
+                            <div className={`border ${message.user?.id === user?.id ? "border-neutral-300 text-slate-800" : "bg-violet-600 border-violet-600 text-neutral-50"} p-2 rounded-xl`}>
+                                <p>{message.text}</p>
+                            </div>
                         </div>
                     }
                 </div>

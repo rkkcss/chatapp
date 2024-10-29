@@ -11,6 +11,7 @@ import { WebSocketContext } from "../contexts/WebSocketProvider";
 import { setRoom } from "../redux/webSocketSlice";
 import { TiMessages } from "react-icons/ti";
 import { useParams } from "react-router";
+import { RiChatOffLine } from "react-icons/ri";
 
 export const LeftMenu = () => {
     const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
@@ -63,16 +64,24 @@ export const LeftMenu = () => {
             <div className={`h-[calc(100dvh-64px)] shadow-lg w-[360px] min-w-[360px] max-w-[360px] ${selectedRoom ? "lg:block hidden" : "block"}`}>
                 <div className="h-full rounded-lg ">
                     <div className="mx-4 pt-4 flex items-center justify-between">
-                        <h1 className="text-2xl font-semibold text-">Chats</h1>
-                        <Button onClick={() => setNewChatModalIsOpen(true)} icon={<LuPenSquare size={22} />} type="text" size="middle" title=""></Button>
+                        <h1 className="text-2xl font-semibold text-slate-800">Chats</h1>
+                        <Button onClick={() => setNewChatModalIsOpen(true)} icon={<LuPenSquare size={22} className="text-slate-800" />} type="text" size="middle" title=""></Button>
                     </div>
-                    <ul className="mt-4 px-2">
-                        {
-                            chatRooms.map(room => (
-                                <LeftMenuChatRoom key={room.id} room={room} />
-                            ))
-                        }
-                    </ul>
+                    {
+                        chatRooms.length === 0 ?
+                            <div className="flex gap-3 flex-col items-center justify-center h-full">
+                                <RiChatOffLine strokeWidth={"1.5"} size={48} className="text-slate-500" />
+                                <p className="text-center text-slate-500 font-medium">No chat rooms found</p>
+                            </div>
+                            :
+                            <ul className="mt-4 px-2">
+                                {
+                                    chatRooms.map(room => (
+                                        <LeftMenuChatRoom key={room.id} room={room} />
+                                    ))
+                                }
+                            </ul>
+                    }
                 </div>
             </div>
             {

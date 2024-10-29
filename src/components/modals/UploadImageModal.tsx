@@ -4,7 +4,6 @@ import { FaPlus } from 'react-icons/fa'
 import { APIImage } from '../../utils/APIImage'
 import { UploadRequestOption } from 'rc-upload/lib/interface';
 import { GrEmoji } from 'react-icons/gr';
-import { MdEmojiEmotions } from 'react-icons/md';
 import { MemojiSelector } from '../MemojiSelector';
 import { IoImageOutline } from 'react-icons/io5';
 

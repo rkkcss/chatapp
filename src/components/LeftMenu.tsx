@@ -9,8 +9,7 @@ import { WebSocketStore } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { WebSocketContext } from "../contexts/WebSocketProvider";
 import { setRoom } from "../redux/webSocketSlice";
-import { TiMessages } from "react-icons/ti";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { RiChatOffLine } from "react-icons/ri";
 
 export const LeftMenu = () => {
@@ -21,6 +20,7 @@ export const LeftMenu = () => {
     const { messageNotification } = useContext(WebSocketContext);
     const dispatch = useDispatch();
     const { roomId } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         API.get("/api/chat-rooms").then((res) => {
@@ -65,7 +65,8 @@ export const LeftMenu = () => {
                 <div className="h-full rounded-lg ">
                     <div className="mx-4 pt-4 flex items-center justify-between">
                         <h1 className="text-2xl font-semibold text-slate-800">Chats</h1>
-                        <Button onClick={() => setNewChatModalIsOpen(true)} icon={<LuPenSquare size={22} className="text-slate-800" />} type="text" size="middle" title=""></Button>
+                        {/* <Button onClick={() => setNewChatModalIsOpen(true)} icon={<LuPenSquare size={22} className="text-slate-800" />} type="text" size="middle" title=""></Button> */}
+                        <Button onClick={() => navigate("/chat/new")} icon={<LuPenSquare size={22} className="text-slate-800" />} type="text" size="middle" title=""></Button>
                     </div>
                     {
                         chatRooms.length === 0 ?
@@ -85,12 +86,11 @@ export const LeftMenu = () => {
                 </div>
             </div>
             {
-                !selectedRoom &&
-                <div className="w-full h-[calc(100dvh-64px)] pt-10 items-center flex-col gap-4 hidden sm:flex">
-                    <TiMessages size={70} className="text-slate-500" />
-                    <p className="text-center text-slate-500 font-medium">Select a chat room to start messaging</p>
-
-                </div>
+                // !selectedRoom &&
+                // <div className="w-full h-[calc(100dvh-64px)] pt-10 items-center flex-col gap-4 hidden sm:flex">
+                //     <TiMessages size={70} className="text-slate-500" />
+                //     <p className="text-center text-slate-500 font-medium">Select a chat room to start messaging</p>
+                // </div>
             }
         </>
     )

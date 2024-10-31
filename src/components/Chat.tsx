@@ -2,7 +2,7 @@ import { useParams } from "react-router";
 import { useContext, useEffect, useState, useCallback } from "react";
 import { API } from "../utils/API";
 import { ChatMessage } from "../types/globalTypes";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { GeneralStore, } from "../store/store";
 import { ChatHeader } from "./ChatHeader";
 import { Message } from "webstomp-client";
@@ -11,6 +11,7 @@ import { WebSocketContext } from "../contexts/WebSocketProvider";
 import { SendMessageSection } from "./SendMessageSection";
 import usePagination from "../hooks/usePagination";
 import MessageComp from "./MessageComp";
+import { setRoom } from "../redux/webSocketSlice";
 
 export const Chat = () => {
     const [messages, setMessages] = useState<Map<string, ChatMessage>>(new Map());
@@ -19,6 +20,7 @@ export const Chat = () => {
     const { chatRigthSideOpen } = useSelector((state: GeneralStore) => state.generalStore);
     const { connected, subscribeToRoom, unsubscribeFromRoom } = useContext(WebSocketContext);
     const [loading, setLoading] = useState<boolean>(true);
+    const dispatch = useDispatch();
 
     const { pagination, setPagination, lastElementRef } = usePagination();
 
@@ -36,6 +38,13 @@ export const Chat = () => {
 
     }
 
+    const getChatRoom = () => {
+        API.get(`/api/chat-rooms/${numberRoomId}`).then(res => {
+            console.log("res", res);
+            dispatch(setRoom(res.data))
+        })
+    }
+
     useEffect(() => {
         if (pagination.page === 0) {
             return;
@@ -49,7 +58,8 @@ export const Chat = () => {
         // Fetch initial messages from API
         setMessages(new Map());
         setPagination((prev) => ({ ...prev, page: 0 }));
-        getMessagesQuery(0)
+        getMessagesQuery(0);
+        getChatRoom()
     }, [numberRoomId]);
 
     // Message handler from subscribed room

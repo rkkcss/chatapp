@@ -1,4 +1,4 @@
-import { Button, Tooltip } from "antd"
+import { Button, notification, Tooltip } from "antd"
 import { useDispatch, useSelector } from "react-redux";
 import { GeneralStore, WebSocketStore } from "../store/store";
 import useRoomName from "../hooks/useRoomName";
@@ -7,6 +7,7 @@ import { toggleChatRightSide } from "../redux/generalSlice";
 import { ChatRoomImage } from "./ChatRoomImage";
 import { useNavigate } from "react-router";
 import { setRoom } from "../redux/webSocketSlice";
+import { CiVideoOn } from "react-icons/ci";
 
 export const ChatHeader = () => {
     const { selectedRoom } = useSelector((state: WebSocketStore) => state.webSocketStore);
@@ -18,6 +19,10 @@ export const ChatHeader = () => {
     const handleBackToChat = () => {
         dispatch(setRoom(null));
         navigate("/chat");
+    }
+
+    const handleCall = () => {
+        notification.info({ message: "Not imlemented yet." })
     }
 
     return (
@@ -32,7 +37,10 @@ export const ChatHeader = () => {
                 <p className="text-xs text-green-500 ">Active</p>
             </div>
 
-            <div className="mr-0 ml-auto">
+            <div className="mr-0 ml-auto flex gap-3">
+                <Tooltip title="Call" placement="bottom">
+                    <Button type="default" icon={<CiVideoOn strokeWidth={1} size={20} onClick={handleCall} />} />
+                </Tooltip>
                 <Button type="default" icon={<FaInfo />} onClick={() => dispatch(toggleChatRightSide(!chatRigthSideOpen))}></Button>
             </div>
         </div>

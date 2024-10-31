@@ -10,6 +10,7 @@ import { WebSocketProvider } from './contexts/WebSocketProvider'
 import { Registration } from './pages/Registration'
 import { Profile } from './pages/Profile'
 import { AdminPage } from './pages/AdminPage'
+import CreateChatRoom from './components/CreateChatRoom'
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
 
           <Route path="/chat" element={<ChatLayout />}>
             <Route path=":roomId" element={<Chat />} />
+            <Route path="new" element={<CreateChatRoom />} />
           </Route>
           <Route path="/profile/:login" element={<Profile />} />
           <Route path="/admin" element={<AdminPage />} />
